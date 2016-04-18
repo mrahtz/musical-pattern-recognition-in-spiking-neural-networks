@@ -127,12 +127,6 @@ def neuron_params_from_args(args):
 def connection_params_from_args(args):
     connection_params = {}
 
-    connection_params['input_layer1_delay_min'] = 0 * b2.ms
-    connection_params['input_layer1_delay_max'] = 10 * b2.ms
-    connection_params['input_layer1_delay_delta'] = \
-        connection_params['input_layer1_delay_max'] - \
-        connection_params['input_layer1_delay_min']
-
     connection_params['tc_pre_ee'] = 20 * b2.ms
     connection_params['tc_post_ee'] = 20 * b2.ms
     connection_params['nu_ee_pre'] = 0.0001

@@ -78,15 +78,11 @@ def init_connections(neurons, connection_params):
         with open('input-layer1e-weights.pickle', 'rb') as pickle_file:
             pickle_obj = pickle.load(pickle_file)
             connections['input-layer1e'].w = pickle_obj[0]
-            connections['input-layer1e'].delay = pickle_obj[1] * b2.ms
     else:
         connections['input-layer1e'].w = 'rand() * 0.4'
-        connections['input-layer1e'].delay = \
-            'input_layer1_delay_min + rand() * input_layer1_delay_delta'
-        pickle_obj = (np.array(connections['input-layer1e'].w),
-                      np.array(connections['input-layer1e'].delay / b2.ms))
+        weights = np.array(connections['input-layer1e'].w)
         with open('input-layer1e-weights.pickle', 'wb') as pickle_file:
-            pickle.dump(pickle_obj, pickle_file)
+            pickle.dump(weights, pickle_file)
 
     # excitatory to inhibitory
     connections['layer1e-layer1i'] = synapses.nonplastic_synapses(
