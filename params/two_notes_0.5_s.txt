@@ -30,7 +30,7 @@
   'min_theta': 0. * volt,
   'nu_ee_post': 0.02,
   'nu_ee_pre': 0.0001,
-  'pre_w_decrease': 0.0002,
+  'pre_w_decrease': 0.00025,
   'tc_ge': 1. * msecond,
   'tc_gi': 2. * msecond,
   'tc_post_ee': 20. * msecond,
