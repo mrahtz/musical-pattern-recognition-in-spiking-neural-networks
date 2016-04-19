@@ -34,6 +34,7 @@ def get_params():
     parser.add_argument('--no_standalone', action='store_true')
     parser.add_argument('--no_vis', action='store_true')
     parser.add_argument('--pre_w_decrease', type=float, default=0.0005)
+    parser.add_argument('--ex_in_w', type=float, default=10.4)
     parser.add_argument('--test_neurons', action='store_true')
     parser.add_argument('--test_stdp_curve', action='store_true')
     parser.add_argument('--test_competition', action='store_true')
@@ -144,7 +145,7 @@ def connection_params_from_args(args):
     connection_params['theta_coef'] = args.theta_coef
     connection_params['adaptation'] = args.adaptation
 
-    connection_params['ex-in-w'] = 10.4
+    connection_params['ex-in-w'] = args.ex_in_w
     connection_params['in-ex-w'] = 17.0
 
     return connection_params
