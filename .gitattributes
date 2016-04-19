@@ -26,3 +26,4 @@ test_inputs/two_notes_1.0_s.pickle filter=lfs diff=lfs merge=lfs -text
 test_inputs/two_notes_1.0_s.wav filter=lfs diff=lfs merge=lfs -text
 test_inputs/two_notes_2.0_s.pickle filter=lfs diff=lfs merge=lfs -text
 test_inputs/two_notes_2.0_s.wav filter=lfs diff=lfs merge=lfs -text
+FluidR3[[:space:]]GM2-2.SF2 filter=lfs diff=lfs merge=lfs -text
