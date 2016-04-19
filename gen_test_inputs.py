@@ -42,10 +42,10 @@ for sequence in note_sequences:
 temp_filename = '/tmp/temp%d.wav' % temp_n
 fluidsynth.midi.start_recording(temp_filename)
 separation_seconds = 0.5
-for _ in range(20):
+for _ in range(4):
     play_sequence(note_sequences['scale'], separation_seconds)
 for _ in range(5):
-    play_sequence(note_sequences['two_notes'], separation_seconds)
+    play_sequence(note_sequences['three_notes'], separation_seconds)
 final_filename = \
     'test_inputs/%s_%.1f_s.wav' % ('scale-three_notes', separation_seconds)
 os.system("sox %s %s remix 1 rate 10000" % \
