@@ -30,7 +30,7 @@ if args.interactive:
 
 plt.figure()
 (pxx, freqs, bins, im) = \
-    pylab.specgram(x=sound.flatten(), NFFT=1024, Fs=sound.samplerate)
+    pylab.specgram(x=sound.flatten(), NFFT=2048, Fs=sound.samplerate)
 n_freqs = len(freqs)
 plt.savefig('figures/%s_spectrogram.png' % input_name)
 spectral_power = 10 * np.log10(pxx)
