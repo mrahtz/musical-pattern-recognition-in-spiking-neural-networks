@@ -234,10 +234,15 @@ def test_stdp_curve(connection_params):
     spike_time_diff = neurons['postsyn'].tspike - neurons['presyn'].tspike
     weight_diff = synapses.w - initial_weights
     plt.ion()
-    plt.plot(spike_time_diff/b2.ms, weight_diff)
-    plt.xlabel(r'$\Delta t$ (ms)')
-    plt.ylabel(r'$\Delta w$')
+    plt.figure(figsize=(6,4.5))
+    plt.plot(spike_time_diff/b2.ms, weight_diff, 'k', linewidth=2)
+    plt.xlabel('Spike time difference (ms)')
+    plt.ylabel('Weight change')
     plt.axhline(0, ls='-', c='k')
+    plt.axvline(0, ls='-', c='k')
+    plt.grid()
+    plt.tight_layout()
+    plt.savefig('figures/skewedstdp.pdf', bbox_inches='tight')
 
     monitors = None
     return (neurons, synapses, monitors, net)
