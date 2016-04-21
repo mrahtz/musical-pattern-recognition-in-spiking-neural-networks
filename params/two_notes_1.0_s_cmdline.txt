@@ -1,1 +1,1 @@
-/var/tmp/mpmr500/Project_Final/stdp_sounds.py --max_theta 60 --theta_coef 0.02 --adaptation absolute-adapting-exp --nu_ee_post 0.02 --pre_w_decrease 0.00025 --input_spikes test_inputs/two_notes_1.0_s.pickle --no_save --no_vis --layer_n_neurons 16
+/var/tmp/mpmr500/Project_Final/stdp_sounds.py --max_theta 60 --theta_coef 0.02 --adaptation absolute-adapting-exp --nu_ee_post 0.02 --pre_w_decrease 0.00025 --input_spikes test_inputs/two_notes_1.0_s.pickle --layer_n_neurons 16
