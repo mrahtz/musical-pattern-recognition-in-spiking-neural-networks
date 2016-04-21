@@ -51,7 +51,8 @@ def init_neurons(input_spikes, layer_n_neurons, neuron_params):
     # visualisation neurons
     if not neuron_params['no_vis']:
         neurons['layer1vis'] = ns.visualisation_neurons(
-            n_neurons=layer_n_neuron
+            n_neurons=layer_n_neurons,
+            params=neuron_params
         )
 
     return neurons
