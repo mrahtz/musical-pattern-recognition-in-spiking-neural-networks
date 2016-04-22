@@ -47,13 +47,20 @@ plt.plot(input_spike_times, input_spike_indices, 'k.', markersize=2)
 max_time = np.amax(input_spike_times)
 plt.xlim([max_time-5, max_time])
 
+if 'scale-three_notes' in args.pickle_file:
+    from_time = 5
+    to_time = 12
+else:
+    from_time = max_time/2
+    to_time = max_time
 # output spikes
 favourite_notes = utils.analyse_note_responses(
     output_spike_indices,
     output_spike_times,
     note_length,
     n_notes,
-    from_time=max_time/2
+    from_time=from_time,
+    to_time=to_time
 )
 plt.subplot(2, 2, 3)
 utils.ordered_spike_raster(output_spike_indices, output_spike_times,
@@ -62,7 +69,10 @@ plt.xlim([0, 5])
 plt.subplot(2, 2, 4)
 utils.ordered_spike_raster(output_spike_indices, output_spike_times,
                            favourite_notes)
-plt.xlim([max_time-5, max_time])
+if 'scale-three_notes' in args.pickle_file:
+    plt.xlim([11, 16])
+else:
+    plt.xlim([max_time-5, max_time])
 
 for i in [1, 2, 3, 4]:
     plt.subplot(2, 2, i)
