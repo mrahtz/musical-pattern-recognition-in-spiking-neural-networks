@@ -156,18 +156,32 @@ def ordered_spike_raster(spike_indices, spike_times, favourite_notes):
     # extract the neuron indices corresponding to those spike times
     relevant_indices = [i for i in spike_indices if i in favourite_notes]
 
-    # generate a list of which note each spike corresponds to
-    spike_notes = [favourite_notes[i] for i in relevant_indices]
-    plt.plot(relevant_times, spike_notes, 'k.', markersize=2)
-    # of course, the y values will be the notes, whereas we want to show
-    # which neurons are actually firing
+    # generate a list of which neuron in favourite_notes
+    # each spike corresponds to, sorted by note order
+    # (we need to do it like this instead of just plotting times against
+    #  favourite_notes[spike_index] in case more than one neuron responds to
+    #  each note)
+    # first of all we need to sort the list by note order
+    fav_note_neurons = np.array(favourite_notes.keys())
+    fav_note_notes = np.array(favourite_notes.values())
+    neurons_ordered_by_note = fav_note_neurons[np.argsort(fav_note_notes)]
+    # now we figure out which index of that list each spike corresponds to
+    neurons_ordered_by_note_indices = \
+        [np.argwhere(neurons_ordered_by_note == i)[0][0]
+         for i in relevant_indices]
+
+    plt.plot(relevant_times, neurons_ordered_by_note_indices,
+             'k.', markersize=2)
+    # of course, the y values will still correspond to indices of
+    # neurons_ordered_by_note, whereas what we actually want to show is which
+    # neuron is firing
     # so we need to map from note number to number
+    n_notes = len(neurons_ordered_by_note)
     plt.yticks(
-        favourite_notes.values(),
-        [str(n) for n in favourite_notes.keys()]
+        range(n_notes),
+        [str(neurons_ordered_by_note[i]) for i in range(n_notes)]
     )
-    max_note = max(favourite_notes.values())
-    plt.ylim([-1, max_note+1])
+    plt.ylim([-1, n_notes])
     plt.grid()
 
 def plot_weight_diff(connections, weight_monitor, from_t=0, to_t=-1, newfig=True):
