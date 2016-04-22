@@ -143,20 +143,33 @@ def analyse_note_responses(spike_monitor, note_length, n_notes, from_time):
 
     return favourite_notes
 
-def ordered_spike_raster(spike_monitor, favourite_notes):
+def ordered_spike_raster(spike_indices, spike_times, favourite_notes):
+    # favourite_notes is a dictionary mapping neuron number to which
+    # note it fires in response to
+    # e.g. favourite_notes[3] == 2 => neuron 3 fires in response to note 2
     nr = favourite_notes
+    # extract spike times of the neurons which actually fire consistently
     times = [time
-        for (spike_n, time) in enumerate(spike_monitor.t/b2.second)
-        if spike_monitor.i[spike_n] in nr
+        for (spike_n, time) in enumerate(spike_times)
+        if spike_indices[spike_n] in nr
     ]
-    indices = [i for i in spike_monitor.i if i in nr]
+    # extract the neuron indices corresponding to those spike times
+    indices = [i for i in spike_indices if i in nr]
+    # select the notes that each spike corresponds to
     notes = [nr[i] for i in indices]
 
+    # nr.keys(): the indices of the neurons which fire consistently
+    # nr.values(): the note that each neuron fires in response to
+    # here we get the indices of the neurons, sorted by the note number that
+    # each fires in response to
+    # e.g. if nr[0] = 3, nr[1] = 1, nr[2] = 2
+    # (neuron 0 fires in response to note 3, etc.)
+    # then neuron_order = 1, 2, 0
     neuron_order = np.array(nr.keys())[np.argsort(nr.values())]
-    indices_sorted = \
-        [np.argwhere(neuron_order == i)[0][0] for i in indices]
+    # generate a list of which note each spike corresponds to
+    spike_notes = [np.argwhere(neuron_order == i)[0][0] for i in indices]
     plt.figure()
-    plt.plot(times, indices_sorted, 'k.', markersize=1)
+    plt.plot(times, spike_notes, 'k.', markersize=1)
     plt.yticks(
         np.arange(len(neuron_order)),
         [str(n) for n in neuron_order]
