@@ -111,13 +111,13 @@ def plot_state_var(monitor, state_vals, firing_neurons, title):
     plt.title(title)
 
 def analyse_note_responses(spike_indices, spike_times,
-                           note_length, n_notes, from_time):
+                           note_length, n_notes, from_time, to_time):
     max_spikes = 0
     for neuron_n in set(spike_indices):
         relevant_spike_times = \
             spike_times[spike_indices == neuron_n]
         relevant_spike_times = \
-            [t for t in relevant_spike_times if t > from_time]
+            [t for t in relevant_spike_times if t > from_time and t < to_time]
         n_spikes = len(relevant_spike_times)
         if n_spikes > max_spikes:
             max_spikes = n_spikes
@@ -127,7 +127,7 @@ def analyse_note_responses(spike_indices, spike_times,
         relevant_spike_times = \
             spike_times[spike_indices == neuron_n]
         relevant_spike_times = \
-            [t for t in relevant_spike_times if t > from_time]
+            [t for t in relevant_spike_times if t > from_time and t < to_time]
         relevant_spike_times = np.array(relevant_spike_times)
         n_spikes = len(relevant_spike_times)
         if n_spikes == 0 or n_spikes < 0.2 * max_spikes:
