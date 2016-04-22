@@ -36,7 +36,7 @@ output_spike_indices = monitors['spikes']['layer1e']['i']
 output_spike_times = monitors['spikes']['layer1e']['t']
 
 plt.ion()
-plt.figure(figsize=(6,4.5))
+plt.figure(figsize=(8,4.5))
 
 # input spikes
 plt.subplot(2, 2, 1)
