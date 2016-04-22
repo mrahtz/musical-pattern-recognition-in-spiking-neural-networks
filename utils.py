@@ -110,11 +110,12 @@ def plot_state_var(monitor, state_vals, firing_neurons, title):
     plt.subplot(n_firing_neurons, 1, 1)
     plt.title(title)
 
-def analyse_note_responses(spike_monitor, note_length, n_notes, from_time):
+def analyse_note_responses(spike_indices, spike_times,
+                           note_length, n_notes, from_time):
     max_spikes = 0
-    for neuron_n in set(spike_monitor.i):
+    for neuron_n in set(spike_indices):
         relevant_spike_times = \
-            spike_monitor.t[spike_monitor.i == neuron_n]
+            spike_times[spike_indices == neuron_n]
         relevant_spike_times = \
             [t for t in relevant_spike_times if t > from_time]
         n_spikes = len(relevant_spike_times)
@@ -122,9 +123,9 @@ def analyse_note_responses(spike_monitor, note_length, n_notes, from_time):
             max_spikes = n_spikes
 
     favourite_notes = {}
-    for neuron_n in set(spike_monitor.i):
+    for neuron_n in set(spike_indices):
         relevant_spike_times = \
-            spike_monitor.t[spike_monitor.i == neuron_n]
+            spike_times[spike_indices == neuron_n]
         relevant_spike_times = \
             [t for t in relevant_spike_times if t > from_time]
         relevant_spike_times = np.array(relevant_spike_times)
