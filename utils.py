@@ -147,34 +147,26 @@ def ordered_spike_raster(spike_indices, spike_times, favourite_notes):
     # favourite_notes is a dictionary mapping neuron number to which
     # note it fires in response to
     # e.g. favourite_notes[3] == 2 => neuron 3 fires in response to note 2
-    nr = favourite_notes
     # extract spike times of the neurons which actually fire consistently
-    times = [time
+    relevant_times = [time
         for (spike_n, time) in enumerate(spike_times)
-        if spike_indices[spike_n] in nr
+        if spike_indices[spike_n] in favourite_notes
     ]
     # extract the neuron indices corresponding to those spike times
-    indices = [i for i in spike_indices if i in nr]
-    # select the notes that each spike corresponds to
-    notes = [nr[i] for i in indices]
+    relevant_indices = [i for i in spike_indices if i in favourite_notes]
 
-    # nr.keys(): the indices of the neurons which fire consistently
-    # nr.values(): the note that each neuron fires in response to
-    # here we get the indices of the neurons, sorted by the note number that
-    # each fires in response to
-    # e.g. if nr[0] = 3, nr[1] = 1, nr[2] = 2
-    # (neuron 0 fires in response to note 3, etc.)
-    # then neuron_order = 1, 2, 0
-    neuron_order = np.array(nr.keys())[np.argsort(nr.values())]
     # generate a list of which note each spike corresponds to
-    spike_notes = [np.argwhere(neuron_order == i)[0][0] for i in indices]
-    plt.figure()
-    plt.plot(times, spike_notes, 'k.', markersize=1)
+    spike_notes = [favourite_notes[i] for i in relevant_indices]
+    plt.plot(relevant_times, spike_notes, 'k.', markersize=2)
+    # of course, the y values will be the notes, whereas we want to show
+    # which neurons are actually firing
+    # so we need to map from note number to number
     plt.yticks(
-        np.arange(len(neuron_order)),
-        [str(n) for n in neuron_order]
+        favourite_notes.values(),
+        [str(n) for n in favourite_notes.keys()]
     )
-
+    max_note = max(favourite_notes.values())
+    plt.ylim([-1, max_note+1])
     plt.xlabel("Time (seconds")
     plt.ylabel("Neuron no.")
     plt.grid()
