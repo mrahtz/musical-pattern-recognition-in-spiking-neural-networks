@@ -168,8 +168,6 @@ def ordered_spike_raster(spike_indices, spike_times, favourite_notes):
     )
     max_note = max(favourite_notes.values())
     plt.ylim([-1, max_note+1])
-    plt.xlabel("Time (seconds")
-    plt.ylabel("Neuron no.")
     plt.grid()
 
 def plot_weight_diff(connections, weight_monitor, from_t=0, to_t=-1, newfig=True):
