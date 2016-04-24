@@ -144,7 +144,7 @@ def analyse_note_responses(spike_indices, spike_times,
 
     return favourite_notes
 
-def ordered_spike_raster(spike_indices, spike_times, favourite_notes):
+def order_spikes_by_note(spike_indices, spike_times, favourite_notes):
     # favourite_notes is a dictionary mapping neuron number to which
     # note it fires in response to
     # e.g. favourite_notes[3] == 2 => neuron 3 fires in response to note 2
@@ -169,6 +169,15 @@ def ordered_spike_raster(spike_indices, spike_times, favourite_notes):
     neurons_ordered_by_note_indices = \
         [np.argwhere(neurons_ordered_by_note == i)[0][0]
          for i in relevant_indices]
+
+    return (relevant_times, neurons_ordered_by_note_indices,
+            neurons_ordered_by_note)
+
+
+def ordered_spike_raster(spike_indices, spike_times, favourite_notes):
+    (relevant_times, neurons_ordered_by_note_indices,
+     neurons_ordered_by_note) = \
+        order_spikes_by_note(spike_indices, spike_times, favourite_times)
 
     plt.plot(relevant_times, neurons_ordered_by_note_indices,
              'k.', markersize=2)
