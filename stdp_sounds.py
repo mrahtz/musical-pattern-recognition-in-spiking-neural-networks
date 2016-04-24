@@ -51,7 +51,8 @@ def init_neurons(input_spikes, layer_n_neurons, neuron_params):
     # visualisation neurons
     if not neuron_params['no_vis']:
         neurons['layer1vis'] = ns.visualisation_neurons(
-            n_neurons=layer_n_neuron
+            n_neurons=layer_n_neurons,
+            params=neuron_params
         )
 
     return neurons
@@ -67,10 +68,12 @@ def init_connections(neurons, connection_params):
 
     source = neurons['input']
     target = neurons['layer1e']
-    connectivity = True # all-to-all connectivity
-    connections['input-layer1e'] = \
-        synapses.stdp_ex_synapses(source, target,
-                                  connectivity, connection_params)
+    connections['input-layer1e'] = synapses.stdp_ex_synapses(
+        source=neurons['input'],
+        target=neurons['layer1e'],
+        connectivity=True, # all-to-all connectivity
+        params=connection_params
+    )
 
     # load saved weights, if they exist
 
@@ -106,7 +109,7 @@ def init_connections(neurons, connection_params):
     if ('layer1vis') in neurons:
         connections['layer1e-layer1vis'] = synapses.visualisation_synapses(
             source=neurons['layer1e'],
-            target=neurons['layer1e'],
+            target=neurons['layer1vis'],
             connectivity='i == j',
         )
 
@@ -316,7 +319,9 @@ def pickle_visualisation(monitors, connections, run_id):
                    monitors['connections']['input-layer1e'].w,
                    np.array(connections['input-layer1e'].j),
                    monitors['spikes']['input'].t / b2.second,
-                   np.array(monitors['spikes']['input'].i))
+                   np.array(monitors['spikes']['input'].i),
+                   monitors['spikes']['layer1e'].t / b2.second,
+                   np.array(monitors['spikes']['layer1e'].i))
         pickle.dump(objects, pickle_file)
 
 def main_simulation(params):

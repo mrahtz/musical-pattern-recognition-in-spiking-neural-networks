@@ -110,23 +110,24 @@ def plot_state_var(monitor, state_vals, firing_neurons, title):
     plt.subplot(n_firing_neurons, 1, 1)
     plt.title(title)
 
-def analyse_note_responses(spike_monitor, note_length, n_notes, from_time):
+def analyse_note_responses(spike_indices, spike_times,
+                           note_length, n_notes, from_time, to_time):
     max_spikes = 0
-    for neuron_n in set(spike_monitor.i):
+    for neuron_n in set(spike_indices):
         relevant_spike_times = \
-            spike_monitor.t[spike_monitor.i == neuron_n]
+            spike_times[spike_indices == neuron_n]
         relevant_spike_times = \
-            [t for t in relevant_spike_times if t > from_time]
+            [t for t in relevant_spike_times if t > from_time and t < to_time]
         n_spikes = len(relevant_spike_times)
         if n_spikes > max_spikes:
             max_spikes = n_spikes
 
     favourite_notes = {}
-    for neuron_n in set(spike_monitor.i):
+    for neuron_n in set(spike_indices):
         relevant_spike_times = \
-            spike_monitor.t[spike_monitor.i == neuron_n]
+            spike_times[spike_indices == neuron_n]
         relevant_spike_times = \
-            [t for t in relevant_spike_times if t > from_time]
+            [t for t in relevant_spike_times if t > from_time and t < to_time]
         relevant_spike_times = np.array(relevant_spike_times)
         n_spikes = len(relevant_spike_times)
         if n_spikes == 0 or n_spikes < 0.2 * max_spikes:
@@ -143,27 +144,53 @@ def analyse_note_responses(spike_monitor, note_length, n_notes, from_time):
 
     return favourite_notes
 
-def ordered_spike_raster(spike_monitor, favourite_notes):
-    nr = favourite_notes
-    times = [time
-        for (spike_n, time) in enumerate(spike_monitor.t/b2.second)
-        if spike_monitor.i[spike_n] in nr
+def order_spikes_by_note(spike_indices, spike_times, favourite_notes):
+    # favourite_notes is a dictionary mapping neuron number to which
+    # note it fires in response to
+    # e.g. favourite_notes[3] == 2 => neuron 3 fires in response to note 2
+    # extract spike times of the neurons which actually fire consistently
+    relevant_times = [time
+        for (spike_n, time) in enumerate(spike_times)
+        if spike_indices[spike_n] in favourite_notes
     ]
-    indices = [i for i in spike_monitor.i if i in nr]
-    notes = [nr[i] for i in indices]
+    # extract the neuron indices corresponding to those spike times
+    relevant_indices = [i for i in spike_indices if i in favourite_notes]
 
-    neuron_order = np.array(nr.keys())[np.argsort(nr.values())]
-    indices_sorted = \
-        [np.argwhere(neuron_order == i)[0][0] for i in indices]
-    plt.figure()
-    plt.plot(times, indices_sorted, 'k.', markersize=1)
+    # generate a list of which neuron in favourite_notes
+    # each spike corresponds to, sorted by note order
+    # (we need to do it like this instead of just plotting times against
+    #  favourite_notes[spike_index] in case more than one neuron responds to
+    #  each note)
+    # first of all we need to sort the list by note order
+    fav_note_neurons = np.array(favourite_notes.keys())
+    fav_note_notes = np.array(favourite_notes.values())
+    neurons_ordered_by_note = fav_note_neurons[np.argsort(fav_note_notes)]
+    # now we figure out which index of that list each spike corresponds to
+    neurons_ordered_by_note_indices = \
+        [np.argwhere(neurons_ordered_by_note == i)[0][0]
+         for i in relevant_indices]
+
+    return (relevant_times, neurons_ordered_by_note_indices,
+            neurons_ordered_by_note)
+
+
+def ordered_spike_raster(spike_indices, spike_times, favourite_notes):
+    (relevant_times, neurons_ordered_by_note_indices,
+     neurons_ordered_by_note) = \
+        order_spikes_by_note(spike_indices, spike_times, favourite_times)
+
+    plt.plot(relevant_times, neurons_ordered_by_note_indices,
+             'k.', markersize=2)
+    # of course, the y values will still correspond to indices of
+    # neurons_ordered_by_note, whereas what we actually want to show is which
+    # neuron is firing
+    # so we need to map from note number to number
+    n_notes = len(neurons_ordered_by_note)
     plt.yticks(
-        np.arange(len(neuron_order)),
-        [str(n) for n in neuron_order]
+        range(n_notes),
+        [str(neurons_ordered_by_note[i]) for i in range(n_notes)]
     )
-
-    plt.xlabel("Time (seconds")
-    plt.ylabel("Neuron no.")
+    plt.ylim([-1, n_notes])
     plt.grid()
 
 def plot_weight_diff(connections, weight_monitor, from_t=0, to_t=-1, newfig=True):
