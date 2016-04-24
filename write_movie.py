@@ -24,7 +24,7 @@ elif '_three_' in pickle_filename:
     n_notes = 3
 elif '_two_' in pickle_filename:
     n_notes = 2
-else:
+elif 'comptine' not in pickle_filename:
     raise Exception("Unknown number of notes for pickle '%s'" %
                     pickle_filename)
 
@@ -35,41 +35,31 @@ with open(pickle_filename, 'rb') as f:
      output_spike_times, output_spike_indices) = objects
 print("done!")
 
-max_time = np.amax(output_spike_times)
-if 'scale-three_notes' in pickle_filename:
-    from_time = 5
-    to_time = 12
+if 'comptine' in pickle_filename:
+    neurons_ordered_by_note = [8, 7, 14, 1]
 else:
-    from_time = max_time/2
-    to_time = max_time
-note_length = 0.5
-# output spikes
-favourite_notes = utils.analyse_note_responses(
-    output_spike_indices,
-    output_spike_times,
-    note_length,
-    n_notes,
-    from_time=from_time,
-    to_time=to_time
-)
+    max_time = np.amax(output_spike_times)
+    if 'scale-three_notes' in pickle_filename:
+        from_time = 5
+        to_time = 12
+    else:
+        from_time = max_time/2
+        to_time = max_time
+    note_length = 0.5
+    # output spikes
+    favourite_notes = utils.analyse_note_responses(
+        output_spike_indices,
+        output_spike_times,
+        note_length,
+        n_notes,
+        from_time=from_time,
+        to_time=to_time
+    )
 
-(output_spike_times_sorted, output_spike_indices_sorted,
- neurons_ordered_by_note) = utils.order_spikes_by_note(output_spike_indices,
-                                                       output_spike_times,
-                                                       favourite_notes)
-
-plt.plot(output_spike_times_sorted, output_spike_indices_sorted,
-         'k.', markersize=2)
-# of course, the y values will still correspond to indices of
-# neurons_ordered_by_note, whereas what we actually want to show is which
-# neuron is firing
-# so we need to map from note number to number
-n_notes = len(neurons_ordered_by_note)
-plt.yticks(
-    range(n_notes),
-    [str(neurons_ordered_by_note[i]) for i in range(n_notes)]
-)
-plt.ylim([-1, n_notes])
+    (output_spike_times_sorted, output_spike_indices_sorted,
+     neurons_ordered_by_note) = utils.order_spikes_by_note(output_spike_indices,
+                                                           output_spike_times,
+                                                           favourite_notes)
 
 n_neurons = potential.shape[0]
 max_spike_index = np.amax(input_spike_indices)
