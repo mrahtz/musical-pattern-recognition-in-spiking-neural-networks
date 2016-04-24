@@ -319,7 +319,9 @@ def pickle_visualisation(monitors, connections, run_id):
                    monitors['connections']['input-layer1e'].w,
                    np.array(connections['input-layer1e'].j),
                    monitors['spikes']['input'].t / b2.second,
-                   np.array(monitors['spikes']['input'].i))
+                   np.array(monitors['spikes']['input'].i),
+                   monitors['spikes']['layer1e'].t / b2.second,
+                   np.array(monitors['spikes']['layer1e'].i))
         pickle.dump(objects, pickle_file)
 
 def main_simulation(params):

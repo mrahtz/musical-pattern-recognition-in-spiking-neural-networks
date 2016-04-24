@@ -7,6 +7,8 @@ import matplotlib.gridspec as gridspec
 import numpy as np
 import pickle
 import argparse
+import utils
+from IPython.core.debugger import Tracer
 
 def get_input_filename():
     parser = argparse.ArgumentParser()
@@ -15,18 +17,67 @@ def get_input_filename():
     return args.pickle_filename
 
 pickle_filename = get_input_filename()
+
+if 'scale' in pickle_filename:
+    n_notes = 7
+elif '_three_' in pickle_filename:
+    n_notes = 3
+elif '_two_' in pickle_filename:
+    n_notes = 2
+else:
+    raise Exception("Unknown number of notes for pickle '%s'" %
+                    pickle_filename)
+
 print("Loading pickle...", end='')
 with open(pickle_filename, 'rb') as f:
     objects = pickle.load(f)
-    (potential, weights, weight_targets, spike_times, spike_indices) = objects
+    (potential, weights, weight_targets, input_spike_times, input_spike_indices,
+     output_spike_times, output_spike_indices) = objects
 print("done!")
 
+max_time = np.amax(output_spike_times)
+if 'scale-three_notes' in pickle_filename:
+    from_time = 5
+    to_time = 12
+else:
+    from_time = max_time/2
+    to_time = max_time
+note_length = 0.5
+# output spikes
+favourite_notes = utils.analyse_note_responses(
+    output_spike_indices,
+    output_spike_times,
+    note_length,
+    n_notes,
+    from_time=from_time,
+    to_time=to_time
+)
+
+(output_spike_times_sorted, output_spike_indices_sorted,
+ neurons_ordered_by_note) = utils.order_spikes_by_note(output_spike_indices,
+                                                       output_spike_times,
+                                                       favourite_notes)
+
+plt.plot(output_spike_times_sorted, output_spike_indices_sorted,
+         'k.', markersize=2)
+# of course, the y values will still correspond to indices of
+# neurons_ordered_by_note, whereas what we actually want to show is which
+# neuron is firing
+# so we need to map from note number to number
+n_notes = len(neurons_ordered_by_note)
+plt.yticks(
+    range(n_notes),
+    [str(neurons_ordered_by_note[i]) for i in range(n_notes)]
+)
+plt.ylim([-1, n_notes])
+
 n_neurons = potential.shape[0]
-max_spike_index = np.amax(spike_indices)
+max_spike_index = np.amax(input_spike_indices)
 n_afferents = weights.shape[0] / n_neurons
 max_afferent_shown = max(n_afferents, max_spike_index)
 min_pot = np.amin(potential)
 max_pot = np.amax(potential)
+n_neurons_to_plot = len(neurons_ordered_by_note)
 
 def get_potential(frame_n):
     p = potential[:, frame_n]
@@ -38,23 +89,26 @@ def get_weight_diffs(frame_n):
     diff = weights[:, frame_n] - weights[:, 0]
     return diff
 
-def spikes_range(start_s, end_s):
-    relevant_spikes = (spike_times >= start_s) & (spike_times <= end_s)
-    times = spike_times[relevant_spikes]
-    indices = spike_indices[relevant_spikes]
+def input_spikes_range(start_s, end_s):
+    relevant_spikes = \
+        (input_spike_times >= start_s) & (input_spike_times <= end_s)
+    times = input_spike_times[relevant_spikes]
+    indices = input_spike_indices[relevant_spikes]
     return (times, indices)
+
+n_spike_rows = 4
 
 def initial_plot():
     fig = plt.figure()
     weight_lines = []
     potential_ims = []
 
-    gs = gridspec.GridSpec(n_neurons+3, 5)
+    gs = gridspec.GridSpec(n_neurons_to_plot+n_spike_rows, 5)
 
     # draw input spike raster at top
-    plt.subplot(gs[0:3, 0:-1])
+    plt.subplot(gs[0:n_spike_rows, 0:-1])
     cur_time = 0
-    times, indices = spikes_range(cur_time, cur_time+0.5)
+    times, indices = input_spikes_range(cur_time, cur_time+1.0)
     input_spike_raster = \
         plt.plot(indices, times, 'k.', markersize=1)[0]
     plt.xlim([0, max_afferent_shown])
@@ -63,9 +117,9 @@ def initial_plot():
 
     pot = get_potential(0)
     diff = get_weight_diffs(0)
-    for neuron_n in range(n_neurons):
+    for i, neuron_n in enumerate(neurons_ordered_by_note):
         # draw weights down the left
-        plt.subplot(gs[neuron_n+3, 0:-1])
+        plt.subplot(gs[i+n_spike_rows, 0:-1])
         relevant_weight_idx = (weight_targets == neuron_n)
         relevant_weights = diff[relevant_weight_idx]
         line = plt.plot(relevant_weights, 'k')[0]
@@ -76,7 +130,7 @@ def initial_plot():
         plt.ylim([min_diff*1.05, max_diff * 1.05])
 
         # draw membrane potential on the right
-        plt.subplot(gs[neuron_n+3, -1])
+        plt.subplot(gs[i+n_spike_rows, -1])
         im = plt.imshow(X=np.matrix(pot[neuron_n]), interpolation='none')
         potential_ims.append(im)
         im.set_clim([0,1])
@@ -94,17 +148,17 @@ def update_plots(frame_n):
 
     # update input spike raster
     cur_time = frame_n * 1/60.0
-    times, indices = spikes_range(cur_time, cur_time+5)
+    times, indices = input_spikes_range(cur_time, cur_time+5)
     times -= cur_time
     input_spike_raster.set_data(indices, times)
 
     # update weights/membrane potential
     pot = get_potential(frame_n)
     diff = get_weight_diffs(frame_n)
-    for neuron_n in range(n_neurons):
+    for i, neuron_n in enumerate(neurons_ordered_by_note):
         relevant_weights = (weight_targets == neuron_n)
-        weight_lines[neuron_n].set_ydata(diff[relevant_weights])
-        potential_ims[neuron_n].set_data(np.matrix(pot[neuron_n]))
+        weight_lines[i].set_ydata(diff[relevant_weights])
+        potential_ims[i].set_data(np.matrix(pot[neuron_n]))
 
     return [input_spike_raster, weight_lines, potential_ims]
 
