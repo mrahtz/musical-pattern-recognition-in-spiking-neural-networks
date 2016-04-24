@@ -68,10 +68,12 @@ def init_connections(neurons, connection_params):
 
     source = neurons['input']
     target = neurons['layer1e']
-    connectivity = True # all-to-all connectivity
-    connections['input-layer1e'] = \
-        synapses.stdp_ex_synapses(source, target,
-                                  connectivity, connection_params)
+    connections['input-layer1e'] = synapses.stdp_ex_synapses(
+        source=neurons['input'],
+        target=neurons['layer1e'],
+        connectivity=True, # all-to-all connectivity
+        params=connection_params
+    )
 
     # load saved weights, if they exist
 
@@ -107,7 +109,7 @@ def init_connections(neurons, connection_params):
     if ('layer1vis') in neurons:
         connections['layer1e-layer1vis'] = synapses.visualisation_synapses(
             source=neurons['layer1e'],
-            target=neurons['layer1e'],
+            target=neurons['layer1vis'],
             connectivity='i == j',
         )
 
