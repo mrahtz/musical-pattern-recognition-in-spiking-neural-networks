@@ -1,0 +1,9 @@
+- human brain good at pattern recognition
+- let's explore pattern recognition in spiking neural networks
+- use music as a vehicle
+- this project: can we classify different notes?
+- three notes
+  - sound file
+  - spectrogram: looks separable
+- diagram
+- demos
