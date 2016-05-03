@@ -11,6 +11,18 @@ implements the first layer of the model proposed in the report: a layer of
 spiking neurons which can differentiate between individual notes in a series of
 simple monophonic test audio sequences.
 
+## Requirements
+
+Needs:
+
+* Python
+* Brian 2 (http://briansimulator.org)
+  * (This code was implemented using Brian 2.0b4. Some changes may be necesesary
+    for later verions.)
+* NumPy
+* matplotlib
+* ffmpeg for animation generation
+
 ## Files
 
 * `test_inputs` contains a number of test sequences in `.wav` files, generated
@@ -33,3 +45,18 @@ simple monophonic test audio sequences.
   membrane potentials and weight changes over time, then combine it with the
   corresponding audio track using `ffmpeg`. Examples of these animations are
   included in `results`.
+
+## Example Run Commands
+
+```
+$ ./gen_audio_spikes.py test_inputs/two_notes_0.5_s.wav
+...
+Writing spike files...
+done!
+
+$ ./stdp_sounds.py --max_theta 60 --theta_coef 0.02 --adaptation absolute-adapting-exp --nu_ee_post 0.02 --pre_w_decrease 0.00025 --input_spikes test_inputs/two_notes_0.5_s.pickle --layer_n_neurons 16 --monitors_dt 16.66666666
+...
+done!
+<observe pretty figures>
+...
+```
