@@ -22,18 +22,15 @@ import brian2 as b2
 import numpy as np
 import matplotlib.pyplot as plt
 
-import modules.utils as utils
-import modules.synapses as synapses
-import modules.equations as eqs
-import modules.neurons as ns
-import modules.params as ps
-import modules.tests
-
-from pylab import *
+import modules.utils as utils_mod
+import modules.synapses as synapse_mod
+import modules.neurons as neuron_mod
+import modules.params as param_mod
+import modules.tests as test_mod
 
 def load_input(run_params):
     """
-    Load spikes to be used for input neurons.
+    Load spikes to be used for input neuroneuron_mod.
     """
 
     pickle_filename = run_params['input_spikes_filename']
@@ -54,27 +51,27 @@ def init_neurons(input_spikes, layer_n_neurons, neuron_params):
     neurons = {}
 
     n_inputs = 513
-    neurons['input'] = ns.prespecified_spike_neurons(
+    neurons['input'] = neuron_mod.prespecified_spike_neurons(
         n_neurons=n_inputs,
         spike_indices=input_spikes['indices'],
         spike_times=input_spikes['times']
     )
 
     # excitatory neurons
-    neurons['layer1e'] = ns.excitatory_neurons(
+    neurons['layer1e'] = neuron_mod.excitatory_neurons(
         n_neurons=layer_n_neurons,
         params=neuron_params
     )
 
     # inhibitory neurons
-    neurons['layer1i'] = ns.inhibitory_neurons(
+    neurons['layer1i'] = neuron_mod.inhibitory_neurons(
         n_neurons=layer_n_neurons,
         params=neuron_params
     )
 
     # visualisation neurons
     if not neuron_params['no_vis']:
-        neurons['layer1vis'] = ns.visualisation_neurons(
+        neurons['layer1vis'] = neuron_mod.visualisation_neurons(
             n_neurons=layer_n_neurons,
             params=neuron_params
         )
@@ -92,9 +89,9 @@ def init_connections(neurons, connection_params):
 
     source = neurons['input']
     target = neurons['layer1e']
-    connections['input-layer1e'] = synapses.stdp_ex_synapses(
-        source=neurons['input'],
-        target=neurons['layer1e'],
+    connections['input-layer1e'] = synapse_mod.stdp_ex_synapses(
+        source=source,
+        target=target,
         connectivity=True, # all-to-all connectivity
         params=connection_params
     )
@@ -112,7 +109,7 @@ def init_connections(neurons, connection_params):
             pickle.dump(weights, pickle_file)
 
     # excitatory to inhibitory
-    connections['layer1e-layer1i'] = synapses.nonplastic_synapses(
+    connections['layer1e-layer1i'] = synapse_mod.nonplastic_synapses(
         source=neurons['layer1e'],
         target=neurons['layer1i'],
         connectivity='i == j',
@@ -121,7 +118,7 @@ def init_connections(neurons, connection_params):
     connections['layer1e-layer1i'].w = connection_params['ex-in-w']
 
     # inhibitory to excitatory
-    connections['layer1i-layer1e'] = synapses.nonplastic_synapses(
+    connections['layer1i-layer1e'] = synapse_mod.nonplastic_synapses(
         source=neurons['layer1i'],
         target=neurons['layer1e'],
         connectivity='i != j',
@@ -130,8 +127,8 @@ def init_connections(neurons, connection_params):
     connections['layer1i-layer1e'].w = connection_params['in-ex-w']
 
     # excitatory to visualisation
-    if ('layer1vis') in neurons:
-        connections['layer1e-layer1vis'] = synapses.visualisation_synapses(
+    if 'layer1vis' in neurons:
+        connections['layer1e-layer1vis'] = synapse_mod.visualisation_synapses(
             source=neurons['layer1e'],
             target=neurons['layer1vis'],
             connectivity='i == j',
@@ -154,16 +151,16 @@ def init_monitors(neurons, connections, monitor_params):
         monitors['spikes'][layer] = b2.SpikeMonitor(neurons[layer])
 
     if 'monitors_dt' not in monitor_params:
-        dt = None
+        timestep = None
     else:
-        dt = monitor_params['monitors_dt']
+        timestep = monitor_params['monitors_dt']
 
     monitors['neurons']['layer1e'] = b2.StateMonitor(
         neurons['layer1e'],
         ['v', 'ge', 'max_ge', 'theta'],
         # record=True is currently broken for standalone simulations
         record=range(len(neurons['layer1e'])),
-        dt=dt
+        dt=timestep
     )
     if 'layer1vis' in neurons:
         monitors['neurons']['layer1vis'] = b2.StateMonitor(
@@ -180,7 +177,7 @@ def init_monitors(neurons, connections, monitor_params):
         connections['input-layer1e'],
         ['w', 'post', 'pre'],
         record=range(n_connections),
-        dt=dt
+        dt=timestep
     )
 
     return monitors
@@ -232,11 +229,13 @@ def analyse_results(monitors, connections, run_id, analysis_params):
     if analysis_params['note_separation'] is not None and \
             analysis_params['n_notes'] is not None:
         end_time = max(monitors['spikes']['layer1e'].t)
-        utils.analyse_note_responses(
-            monitors['spikes']['layer1e'],
+        utils_mod.analyse_note_responses(
+            spike_indices=monitors['spikes']['layer1e'].i,
+            spike_times=monitors['spikes']['layer1e'].t,
             note_length=analysis_params['note_separation'],
             n_notes=analysis_params['n_notes'],
-            from_time=end_time/2
+            from_time=end_time/2,
+            to_time=end_time
         )
 
     if not analysis_params['batch']:
@@ -267,32 +266,32 @@ def analyse_results(monitors, connections, run_id, analysis_params):
     plt.tight_layout()
 
     firing_neurons = set(monitors['spikes']['layer1e'].i)
-    utils.plot_state_var(
+    utils_mod.plot_state_var(
         monitors['neurons']['layer1e'],
         monitors['neurons']['layer1e'].ge/b2.siemens,
         firing_neurons,
         'Current'
     )
-    utils.plot_state_var(
+    utils_mod.plot_state_var(
         monitors['neurons']['layer1e'],
         monitors['neurons']['layer1e'].theta/b2.mV,
         firing_neurons,
         'Theta'
     )
-    utils.plot_state_var(
+    utils_mod.plot_state_var(
         monitors['neurons']['layer1e'],
         monitors['neurons']['layer1e'].v/b2.mV,
         firing_neurons,
         'Membrane potential'
     )
 
-    utils.plot_weight_diff(
+    utils_mod.plot_weight_diff(
         connections['input-layer1e'],
         monitors['connections']['input-layer1e']
     )
 
     if not analysis_params['no_save_figs']:
-        utils.save_figures(run_id)
+        utils_mod.save_figures(run_id)
 
 def pickle_results(monitors, run_id):
     """
@@ -345,14 +344,14 @@ def main_simulation(params):
     spike_filename = os.path.basename(run_params['input_spikes_filename'])
     run_id = spike_filename.replace('.pickle', '')
     if not run_params['from_paramfile']:
-        ps.record_params(params, run_id)
+        param_mod.record_params(params, run_id)
     input_spikes = load_input(run_params)
 
     input_end_time = np.ceil(np.amax(input_spikes['times']))
     if 'run_time' not in run_params:
         run_params['run_time'] = input_end_time
 
-    print("Initialising neuron groups...")
+    print("Initialising neurons...")
     neurons = init_neurons(
         input_spikes, run_params['layer_n_neurons'],
         neuron_params
@@ -401,21 +400,21 @@ def main():
 
     np.random.seed(1)
 
-    params = ps.get_params()
+    params = param_mod.get_params()
     (neuron_params, connection_params, monitor_params, run_params,
      analysis_params) = params
 
     if run_params['test_stdp_curve']:
         neurons, connections, monitors, net = \
-            tests.test_stdp_curve(connection_params)
+            test_mod.test_stdp_curve(connection_params)
     elif run_params['test_neurons']:
-        neurons, connections, monitors, net = tests.test_neurons(
+        neurons, connections, monitors, net = test_mod.test_neurons(
             neuron_params,
             connection_params,
             with_competition=False
         )
     elif run_params['test_competition']:
-        neurons, connections, monitors, net = tests.test_neurons(
+        neurons, connections, monitors, net = test_mod.test_neurons(
             neuron_params,
             connection_params,
             with_competition=True
