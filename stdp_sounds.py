@@ -1,12 +1,18 @@
 #!/usr/bin/env python
 
 """
-Set up a network with:
-- an input layer of excitatory neurons
-- one or more subsequent layers of excitatory neurons
-  with non-plastic lateral inhibitory connections so that
-  only one neuron can fire at a time
-- plastic connections between layers
+Set up and run a simulation for a spiking neural network with:
+* An input layer of excitatory neurons
+* An output layer of excitatory neurons
+* A layer of inhibitory neurons connected to the excitatory output neurons,
+  used to implement winner-take-all competitive dynamics
+* Plasticity simulated using spike-timing-dependent plasticity (STDP)
+
+An additional layer of excitatory neurons is also set up whose membrane
+potentials are used for visualisation of the activity of the network.
+(Visualising the membrane potentials of the output neurons directly is a bit
+ugly, because the inhibitory mechanism causes a sharp drop in membrane potential
+in all but the winning neuron, resulting in a lot of flashing.)
 """
 
 from __future__ import print_function, division
@@ -25,9 +31,25 @@ import modules.tests
 
 from pylab import *
 
+def load_input(run_params):
+    """
+    Load spikes to be used for input neurons.
+    """
+
+    pickle_filename = run_params['input_spikes_filename']
+    with open(pickle_filename, 'rb') as pickle_file:
+        (input_spike_times, input_spike_indices) = pickle.load(pickle_file)
+    input_spike_times = input_spike_times * b2.second
+
+    spikes = {}
+    spikes['indices'] = input_spike_indices
+    spikes['times'] = input_spike_times
+
+    return spikes
+
 def init_neurons(input_spikes, layer_n_neurons, neuron_params):
     """
-    Initialise neuron group objects.
+    Initialise neurons.
     """
     neurons = {}
 
@@ -61,7 +83,7 @@ def init_neurons(input_spikes, layer_n_neurons, neuron_params):
 
 def init_connections(neurons, connection_params):
     """
-    Initialise synaptic connections between neurons and between layers.
+    Initialise synaptic connections between different layers of neurons.
     """
 
     connections = {}
@@ -119,7 +141,7 @@ def init_connections(neurons, connection_params):
 
 def init_monitors(neurons, connections, monitor_params):
     """
-    Initialise objects monitoring state variables in the network.
+    Initialise Brian objects monitoring state variables in the network.
     """
 
     monitors = {
@@ -197,22 +219,6 @@ def run_simulation(run_params, neurons, connections, monitors, run_id):
         print("done!")
 
     return net
-
-def load_input(run_params):
-    """
-    Load spikes to be used as output from input layer.
-    """
-
-    pickle_filename = run_params['input_spikes_filename']
-    with open(pickle_filename, 'rb') as pickle_file:
-        (input_spike_times, input_spike_indices) = pickle.load(pickle_file)
-    input_spike_times = input_spike_times * b2.second
-
-    spikes = {}
-    spikes['indices'] = input_spike_indices
-    spikes['times'] = input_spike_times
-
-    return spikes
 
 def analyse_results(monitors, connections, run_id, analysis_params):
     """
@@ -327,6 +333,9 @@ def pickle_visualisation(monitors, connections, run_id):
         pickle.dump(objects, pickle_file)
 
 def main_simulation(params):
+    """
+    Initialise simulation objects and run the simulation.
+    """
     (neuron_params, connection_params, monitor_params, run_params,
      analysis_params) = params
 
@@ -386,7 +395,8 @@ def main_simulation(params):
 
 def main():
     """
-    Orchestrate the rest of the program.
+    Get parameters parsed on command line, and use them to decide whether to run
+    the test suite or actually run the simulate.
     """
 
     np.random.seed(1)
