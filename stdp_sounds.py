@@ -15,12 +15,14 @@ import pickle
 import brian2 as b2
 import numpy as np
 import matplotlib.pyplot as plt
-import utils
-import stdp_sounds_eqs as eqs
-import synapses
-import neurons as ns
-import params as ps
-import tests
+
+import modules.utils as utils
+import modules.synapses as synapses
+import modules.equations as eqs
+import modules.neurons as ns
+import modules.params as ps
+import modules.tests
+
 from pylab import *
 
 def init_neurons(input_spikes, layer_n_neurons, neuron_params):
