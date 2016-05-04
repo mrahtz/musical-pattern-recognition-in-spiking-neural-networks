@@ -17,7 +17,7 @@ def get_params():
     parser.add_argument('--max_theta', type=float, default=50)
     parser.add_argument('--run_time')
     parser.add_argument('--batch', action='store_true')
-    parser.add_argument('--input_spikes', default='music_spikes.pickle')
+    parser.add_argument('--input_spikes', required=True)
     parser.add_argument('--monitors_dt', type=float, default=1)
     parser.add_argument('--monitor_all_time', action='store_true')
     parser.add_argument('--layer_n_neurons', type=int, default=128)
