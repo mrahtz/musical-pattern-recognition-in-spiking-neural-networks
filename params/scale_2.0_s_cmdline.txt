@@ -1,1 +1,1 @@
-./stdp_sounds.py --input_spikes_file test_inputs/scale_2.0_s.pickle
+./stdp_sounds.py --input_spikes_file test_inputs/scale_2.0_s.pickle --run_time 28

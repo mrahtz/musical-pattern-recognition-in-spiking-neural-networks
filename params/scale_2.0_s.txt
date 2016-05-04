@@ -43,6 +43,7 @@
   'layer_n_neurons': 16,
   'no_save_results': False,
   'no_standalone': False,
+  'run_time': 28. * second,
   'test_competition': False,
   'test_neurons': False,
   'test_stdp_curve': False},
