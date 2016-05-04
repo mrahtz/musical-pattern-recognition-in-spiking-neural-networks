@@ -217,7 +217,7 @@ def run_simulation(run_params, neurons, connections, monitors, run_id):
 
     return net
 
-def analyse_results(monitors, connections, run_id, analysis_params):
+def analyse_results(monitors, connections, analysis_params):
     """
     Analyse results of simulation and plot graphs.
     """
@@ -242,27 +242,30 @@ def analyse_results(monitors, connections, run_id, analysis_params):
         plt.ion()
 
     plt.figure()
-    for i, group in enumerate(monitors['spikes']):
-        plt.subplot(len(monitors['spikes']), 1, i+1)
-        plt.title('Group "%s" spikes' % group)
-        plt.plot(
-            monitors['spikes'][group].t/b2.second,
-            monitors['spikes'][group].i,
-            'k.',
-            markersize=2
-        )
-        min_i = np.amin(monitors['spikes'][group].i)
-        max_i = np.amax(monitors['spikes'][group].i)
-        plt.ylim([min_i-1, max_i+1])
-        key0 = monitors['spikes'].keys()[0]
-        max_t = np.amax(monitors['spikes'][key0].t/b2.second,)
-        plt.xticks(np.arange(0, max_t, 0.5))
-        plt.grid()
+
+    plt.subplot(2, 1, 1)
+    plt.title("Input spikes")
+    plt.plot(
+        monitors['spikes']['input'].t/b2.second,
+        monitors['spikes']['input'].i,
+        'k.',
+        markersize=2
+    )
+    plt.ylabel("Neuron no.")
+    plt.grid()
+
+    plt.subplot(2, 1, 2)
+    plt.title("Output spikes")
+    plt.plot(
+        monitors['spikes']['layer1e'].t/b2.second,
+        monitors['spikes']['layer1e'].i,
+        'k.',
+        markersize=2
+    )
+    plt.grid()
+    plt.ylabel("Neuron no.")
 
     plt.xlabel("Time (seconds)")
-    plt.ylabel("Neuron no.")
-    plt.subplot(len(monitors['spikes']), 1, 1)
-    plt.title("Run '%s'" % run_id)
     plt.tight_layout()
 
     firing_neurons = set(monitors['spikes']['layer1e'].i)
@@ -276,7 +279,7 @@ def analyse_results(monitors, connections, run_id, analysis_params):
         monitors['neurons']['layer1e'],
         monitors['neurons']['layer1e'].theta/b2.mV,
         firing_neurons,
-        'Theta'
+        'Threshold increase'
     )
     utils_mod.plot_state_var(
         monitors['neurons']['layer1e'],
@@ -289,9 +292,6 @@ def analyse_results(monitors, connections, run_id, analysis_params):
         connections['input-layer1e'],
         monitors['connections']['input-layer1e']
     )
-
-    if not analysis_params['no_save_figs']:
-        utils_mod.save_figures(run_id)
 
 def pickle_results(monitors, run_id):
     """
@@ -376,9 +376,10 @@ def main_simulation(params):
     analyse_results(
         monitors,
         connections,
-        run_id,
         analysis_params
     )
+    if not analysis_params['no_save_figs']:
+        utils_mod.save_figures(run_id)
 
     if not run_params['no_save_results']:
         print("Saving results...")
