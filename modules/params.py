@@ -12,28 +12,30 @@ def get_params():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--parameters')
-    parser.add_argument('--theta_coef', type=float, default=1.7)
-    parser.add_argument('--nu_ee_post', type=float, default=0.06)
-    parser.add_argument('--max_theta', type=float, default=50)
+    parser.add_argument('--theta_coef', type=float, default=0.02)
+    parser.add_argument('--nu_ee_post', type=float, default=0.02)
+    parser.add_argument('--max_theta', type=float, default=60)
     parser.add_argument('--run_time')
     parser.add_argument('--batch', action='store_true')
     parser.add_argument('--input_spikes', required=True)
-    parser.add_argument('--monitors_dt', type=float, default=1)
+    # set monitors time step for 60 fps by default,
+    # for generation of 60 fps visualisation
+    parser.add_argument('--monitors_dt', type=float, default=1000/60.0)
     parser.add_argument('--monitor_all_time', action='store_true')
-    parser.add_argument('--layer_n_neurons', type=int, default=128)
+    parser.add_argument('--layer_n_neurons', type=int, default=16)
     parser.add_argument('--adaptation',
                         choices=['absolute',
                                  'weight-relative',
                                  'absolute-adapting-exp',
                                  'absolute-adapting-noexp',
                                  'ge-theta'],
-                        default='absolute')
+                        default='absolute-adapting-exp')
     parser.add_argument('--no_save', action='store_true')
     parser.add_argument('--note_separation', type=float)
     parser.add_argument('--n_notes', type=int)
     parser.add_argument('--no_standalone', action='store_true')
     parser.add_argument('--no_vis', action='store_true')
-    parser.add_argument('--pre_w_decrease', type=float, default=0.0005)
+    parser.add_argument('--pre_w_decrease', type=float, default=0.00025)
     parser.add_argument('--ex_in_w', type=float, default=10.4)
     parser.add_argument('--test_neurons', action='store_true')
     parser.add_argument('--test_stdp_curve', action='store_true')
