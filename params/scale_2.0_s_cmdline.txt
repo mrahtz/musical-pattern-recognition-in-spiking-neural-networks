@@ -1,1 +1,1 @@
-./stdp_sounds.py --max_theta 60 --theta_coef 0.02 --adaptation absolute-adapting-exp --nu_ee_post 0.02 --pre_w_decrease 0.00025 --input_spikes test_inputs/scale_2.0_s.pickle --layer_n_neurons 16 --monitors_dt 16.66666666
+./stdp_sounds.py --input_spikes_file test_inputs/scale_2.0_s.pickle --run_time 28

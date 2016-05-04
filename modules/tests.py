@@ -5,7 +5,20 @@ import brian2 as b2
 import neurons as ns
 import synapses as ss
 
+"""
+(very) Basic test suite for simulation code.
+"""
+
 def test_neurons(neuron_params, connection_params, with_competition):
+    """
+    Test LIF/threshold adaptation/winner-take-all competition code.
+    * Sets up a layer of input neurons and a layer of output neurons
+    * Goes through each input neuron in the layer one after the other,
+      making each spike a few times.
+    * Plots spike rasters of input spikes and output spikes.
+    * Plots membrane potential of output neurons with firing threshold drawn as
+      a red line.
+    """
     # set up input spikes
     n_inputs = 10
     n_spikes_per_neuron = 10
@@ -105,7 +118,6 @@ def test_neurons(neuron_params, connection_params, with_competition):
 
     plt.ion()
     plt.figure()
-    plt.suptitle("Spikes")
 
     # spikes
 
@@ -181,7 +193,9 @@ def test_neurons(neuron_params, connection_params, with_competition):
 
 def test_stdp_curve(connection_params):
     """
-    Based on "Introduction to Brian 2 part 2: Synapses".
+    Plot STDP curve.
+    Based on code in Brian user manual,
+    "Introduction to Brian 2 part 2: Synapses".
     """
     n_neurons = 100
     tmax = 50 * b2.ms
@@ -246,6 +260,3 @@ def test_stdp_curve(connection_params):
 
     monitors = None
     return (neurons, synapses, monitors, net)
-
-def test_competition(neuron_params, connection_params):
-    return None

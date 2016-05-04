@@ -52,17 +52,49 @@ Needs:
 
 ## Running Simulation
 
+To generate spikes for an audio file:
 ```
 $ ./gen_audio_spikes.py test_inputs/two_notes_0.5_s.wav
 ...
 Writing spike files...
 done!
+```
 
-$ ./stdp_sounds.py --max_theta 60 --theta_coef 0.02 --adaptation absolute-adapting-exp --nu_ee_post 0.02 --pre_w_decrease 0.00025 --input_spikes test_inputs/two_notes_0.5_s.pickle --layer_n_neurons 16 --monitors_dt 16.66666666
+To then run a simulation:
+```
+$ python -i stdp_sounds.py --input_spikes_file test_inputs/two_notes_0.5_s.pickle
 ...
 done!
 <observe pretty figures>
 ```
 
+The time the simulation takes to complete can be reduced somewhat by turning off
+the visualisation neurons and not saving anything: `--no_vis --no_save`.
+
 If the simulation uses too much memory, you can decrease the resolution of
 state variable recordings by increasing `--monitors_dt`.
+
+Alternatively, run a simulation using a saved set of parameters:
+
+```
+$ python -i stdp_sounds.py --parameters_file params/two_notes_0.5_s.txt
+```
+
+Note that all other arguments are ignored when using `--parameters_file`.
+
+## Tests
+
+The code includes a few basic tests:
+
+* LIF test, run with `python -i stdp_sounds.py --test_neurons`. This sets up a
+  simple network of regularly-firing input neurons and a bunch of output
+  neurons, then plots graphs of input/output spikes and membrane potential of
+  the output neurons. Graphs can then be inspected to check that LIF
+  dynamics/threshold adaptation is working correctly.
+* Winner-take-all inhibitory connections test, run with `python -i
+  stdp_sounds.py --test_competition`. This runs the same thing as the LIF tests
+  but with inhibitory connections enabled.
+* STDP curve test, run with `python -i stdp_sounds.py --test_stdp_curve`. This
+  plots the STDP curve. (Note that the STDP curve is currently heavily
+  potentiation-skewed. There was not time to fix this an re-run all tests
+  sequences before the end of the project.)
