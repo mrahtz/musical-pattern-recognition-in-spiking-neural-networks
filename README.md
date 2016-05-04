@@ -62,11 +62,14 @@ done!
 
 To then run a simulation:
 ```
-$ ./stdp_sounds.py --input_spikes_file test_inputs/two_notes_0.5_s.pickle
+$ python -i stdp_sounds.py --input_spikes_file test_inputs/two_notes_0.5_s.pickle
 ...
 done!
 <observe pretty figures>
 ```
+
+The time the simulation takes to complete can be reduced somewhat by turning off
+the visualisation neurons and not saving anything: `--no_vis --no_save`.
 
 If the simulation uses too much memory, you can decrease the resolution of
 state variable recordings by increasing `--monitors_dt`.
@@ -74,10 +77,10 @@ state variable recordings by increasing `--monitors_dt`.
 Alternatively, run a simulation using a saved set of parameters:
 
 ```
-$ ./stdp_sounds.py --parameters_file §
+$ python -i stdp_sounds.py --parameters_file params/two_notes_0.5_s.txt
 ```
 
-Note that all other arguments are 
+Note that all other arguments are ignored when using `--parameters_file`.
 
 ## Tests
 
