@@ -50,7 +50,7 @@ Needs:
   corresponding audio track using `ffmpeg`. Examples of these animations are
   included in `results`.
 
-## Example Run Commands
+## Running Simulation
 
 ```
 $ ./gen_audio_spikes.py test_inputs/two_notes_0.5_s.wav
@@ -63,3 +63,6 @@ $ ./stdp_sounds.py --max_theta 60 --theta_coef 0.02 --adaptation absolute-adapti
 done!
 <observe pretty figures>
 ```
+
+If the simulation uses too much memory, you can decrease the resolution of
+state variable recordings by increasing `--monitors_dt`.
