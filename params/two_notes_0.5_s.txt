@@ -37,7 +37,7 @@
   'tc_pre_ee': 20. * msecond,
   'theta_coef': 0.02,
   'wmax_ee': 1.0},
- {'monitors_dt': 16.66666666 * msecond},
+ {'monitors_dt': 16.66666667 * msecond},
  {'from_paramfile': False,
   'input_spikes_filename': 'test_inputs/two_notes_0.5_s.pickle',
   'layer_n_neurons': 16,
