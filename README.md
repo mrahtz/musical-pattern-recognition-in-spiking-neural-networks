@@ -1,4 +1,4 @@
-# Code for 'Musical Pattern Recognition in Spiking Neural Networks'
+# Musical Pattern Recognition in Spiking Neural Networks
 
 This repository contains the source code for my final-year project in my BEng
 degree, 'Musical Pattern Recognition in Spiking Neural Networks'. The title of
