@@ -1,1 +1,0 @@
-./stdp_sounds.py --max_theta 65 --theta_coef 0.07 --nu_ee_post 0.07 --pre_w_decrease 0.0003 --ex_in_w 40 --run_time 16 --input_spikes test_inputs/comptine_0.5_s.pickle
