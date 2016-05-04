@@ -52,13 +52,17 @@ Needs:
 
 ## Running Simulation
 
+To generate spikes for an audio file:
 ```
 $ ./gen_audio_spikes.py test_inputs/two_notes_0.5_s.wav
 ...
 Writing spike files...
 done!
+```
 
-$ ./stdp_sounds.py --max_theta 60 --theta_coef 0.02 --adaptation absolute-adapting-exp --nu_ee_post 0.02 --pre_w_decrease 0.00025 --input_spikes test_inputs/two_notes_0.5_s.pickle --layer_n_neurons 16 --monitors_dt 16.66666666
+To then run a simulation:
+```
+$ ./stdp_sounds.py --input_spikes_file test_inputs/two_notes_0.5_s.pickle
 ...
 done!
 <observe pretty figures>
@@ -66,6 +70,14 @@ done!
 
 If the simulation uses too much memory, you can decrease the resolution of
 state variable recordings by increasing `--monitors_dt`.
+
+Alternatively, run a simulation using a saved set of parameters:
+
+```
+$ ./stdp_sounds.py --parameters_file §
+```
+
+Note that all other arguments are 
 
 ## Tests
 
