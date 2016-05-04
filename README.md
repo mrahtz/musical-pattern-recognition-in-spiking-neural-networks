@@ -66,3 +66,20 @@ done!
 
 If the simulation uses too much memory, you can decrease the resolution of
 state variable recordings by increasing `--monitors_dt`.
+
+## Tests
+
+The code includes a few basic tests:
+
+* LIF test, run with `python -i stdp_sounds.py --test_neurons`. This sets up a
+  simple network of regularly-firing input neurons and a bunch of output
+  neurons, then plots graphs of input/output spikes and membrane potential of
+  the output neurons. Graphs can then be inspected to check that LIF
+  dynamics/threshold adaptation is working correctly.
+* Winner-take-all inhibitory connections test, run with `python -i
+  stdp_sounds.py --test_competition`. This runs the same thing as the LIF tests
+  but with inhibitory connections enabled.
+* STDP curve test, run with `python -i stdp_sounds.py --test_stdp_curve`. This
+  plots the STDP curve. (Note that the STDP curve is currently heavily
+  potentiation-skewed. There was not time to fix this an re-run all tests
+  sequences before the end of the project.)
