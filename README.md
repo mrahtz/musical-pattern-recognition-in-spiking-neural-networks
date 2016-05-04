@@ -11,6 +11,10 @@ implements the first layer of the model proposed in the report: a layer of
 spiking neurons which can differentiate between individual notes in a series of
 simple monophonic test audio sequences.
 
+The architecture of the network comes from Peter Diehl's model in [Unsupervised
+learning of digit recognition using spike-timing-dependent
+plasticity](http://dx.doi.org/10.3389/fncom.2015.00099).
+
 ## Requirements
 
 Needs:
