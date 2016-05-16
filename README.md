@@ -15,6 +15,36 @@ The architecture of the network comes from Peter Diehl's model in [Unsupervised
 learning of digit recognition using spike-timing-dependent
 plasticity](http://dx.doi.org/10.3389/fncom.2015.00099).
 
+## `fix_stdp` Branch
+
+This branch demonstrates the effects of using a more balanced STDP curve (try
+`python -i stdp_sounds.py --test_stdp`). As it turns out, it completely breaks
+things.
+
+To see why, consider a postsynaptic neuron driven by a single regularly-firing
+presynaptic neuron:
+```
+Pre   X   X   X   X   X   X   X   X   X   X
+Post       X           X           X
+```
+The question that plasticity is trying to figure out is: is the presynaptic
+spiking relevant to the postsynaptic spiking? (If so, the corresponding weight
+should be increased.) And actually, in a situation with a regularly-firing
+presynaptic neuron (as in a rate-coded input with constant input stimulus, say),
+from the spike timing perspective there's some ambiguity. Yes, the presynaptic
+spikes always precede a postsynaptic spike (and so look relevant, according to
+spike timing) - but they also always proceed a postsynaptic spike too (and so
+look irrelevant).
+
+The only way I see around this is to skew the STDP curve in favour of
+potentiation. That way, the weight decreases from pre-after-post firing in a
+situation like this will be cancelled out by the subsequent larger weight
+increases.
+
+But getting a curve which was potentiation-skewed and yet still balanced working
+looked like it would require lots more parameter tweaking. So, this branch was
+abandoned.
+
 ## Requirements
 
 Needs:
@@ -95,6 +125,4 @@ The code includes a few basic tests:
   stdp_sounds.py --test_competition`. This runs the same thing as the LIF tests
   but with inhibitory connections enabled.
 * STDP curve test, run with `python -i stdp_sounds.py --test_stdp_curve`. This
-  plots the STDP curve. (Note that the STDP curve is currently heavily
-  potentiation-skewed. There was not time to fix this an re-run all tests
-  sequences before the end of the project.)
+  plots the STDP curve.
