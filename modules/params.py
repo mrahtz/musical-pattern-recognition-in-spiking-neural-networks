@@ -3,7 +3,6 @@ import sys
 import pprint
 import argparse
 import brian2 as b2
-from IPython.core.debugger import Tracer
 
 def get_params():
     """
@@ -24,7 +23,11 @@ def get_params():
     group.add_argument('--test_competition', action='store_true')
 
     parser.add_argument('--theta_coef', type=float, default=0.02)
-    parser.add_argument('--nu_ee_post', type=float, default=0.02)
+    # from doi:10.1371/journal.pone.0001377
+    a_plus = 0.03125
+    a_minus = 0.85 * a_plus
+    parser.add_argument('--nu_ee_pre', type=float, default=a_minus)
+    parser.add_argument('--nu_ee_post', type=float, default=a_plus)
     parser.add_argument('--max_theta', type=float, default=60)
     parser.add_argument('--run_time')
     parser.add_argument('--batch', action='store_true')
@@ -137,9 +140,10 @@ def neuron_params_from_args(args):
 def connection_params_from_args(args):
     connection_params = {}
 
-    connection_params['tc_pre_ee'] = 20 * b2.ms
-    connection_params['tc_post_ee'] = 20 * b2.ms
-    connection_params['nu_ee_pre'] = 0.0001
+    # time constants from doi:10.1371/journal.pone.0001377
+    connection_params['tc_pre_ee'] = 16.8 * b2.ms
+    connection_params['tc_post_ee'] = 33.7 * b2.ms
+    connection_params['nu_ee_pre'] = args.nu_ee_pre
     connection_params['nu_ee_post'] = args.nu_ee_post
     connection_params['exp_ee_pre'] = 0.2
     connection_params['exp_ee_post'] = connection_params['exp_ee_pre']
