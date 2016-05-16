@@ -95,6 +95,6 @@ The code includes a few basic tests:
   stdp_sounds.py --test_competition`. This runs the same thing as the LIF tests
   but with inhibitory connections enabled.
 * STDP curve test, run with `python -i stdp_sounds.py --test_stdp_curve`. This
-  plots the STDP curve. (Note that the STDP curve is currently heavily
-  potentiation-skewed. There was not time to fix this an re-run all tests
-  sequences before the end of the project.)
+  plots the STDP curve. A heavily-potentiation skewed STDP curve is used here
+  because for the rate-coded input setup used it's actually much simpler to just
+  do Hebbian-like learning.
