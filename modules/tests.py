@@ -2,8 +2,8 @@ from __future__ import print_function, division
 import numpy as np
 import matplotlib.pyplot as plt
 import brian2 as b2
-import neurons as ns
-import synapses as ss
+import modules.neurons as ns
+import modules.synapses as ss
 
 """
 (very) Basic test suite for simulation code.

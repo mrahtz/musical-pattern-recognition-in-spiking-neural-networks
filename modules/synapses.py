@@ -1,5 +1,5 @@
 import brian2 as b2
-import equations as eqs
+import modules.equations as eqs
 
 def stdp_ex_synapses(source, target, connectivity, params):
     if params['adaptation'] == 'weight-relative':

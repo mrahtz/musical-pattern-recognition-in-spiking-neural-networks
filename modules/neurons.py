@@ -1,6 +1,6 @@
 import numpy as np
 import brian2 as b2
-import equations as eqs
+import modules.equations as eqs
 
 def prespecified_spike_neurons(n_neurons, spike_indices, spike_times):
     neurons = b2.SpikeGeneratorGroup(
