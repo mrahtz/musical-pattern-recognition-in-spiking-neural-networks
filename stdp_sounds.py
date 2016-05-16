@@ -344,22 +344,22 @@ def main_simulation(params):
         input_spikes, run_params['layer_n_neurons'],
         neuron_params
     )
-    print("done")
+    print("done!")
 
     print("Initialising connections...")
     connections = init_connections(
         neurons,
         connection_params
     )
-    print("done")
+    print("done!")
 
     print("Initialising monitors...")
     monitors = init_monitors(neurons, connections, monitor_params)
-    print("done")
+    print("done!")
 
     print("Running simulation...")
     net = run_simulation(run_params, neurons, connections, monitors, run_id)
-    print("done")
+    print("done!")
 
     analyse_results(
         monitors,
