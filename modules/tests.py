@@ -245,11 +245,12 @@ def test_stdp_curve(connection_params):
     net.run(run_time, report='text')
 
     # plot weight diff
-    spike_time_diff = neurons['postsyn'].tspike - neurons['presyn'].tspike
+    spike_time_diff = \
+        (neurons['postsyn'].tspike - neurons['presyn'].tspike) / b2.ms
     weight_diff = synapses.w - initial_weights
     plt.ion()
     plt.figure(figsize=(6,4.5))
-    plt.plot(spike_time_diff/b2.ms, weight_diff, 'k', linewidth=2)
+    plt.plot(spike_time_diff, weight_diff, 'k', linewidth=2)
     plt.xlabel('Spike time difference (ms)')
     plt.ylabel('Weight change')
     plt.axhline(0, ls='-', c='k')
@@ -257,6 +258,17 @@ def test_stdp_curve(connection_params):
     plt.grid()
     plt.tight_layout()
     plt.savefig('figures/skewedstdp.pdf', bbox_inches='tight')
+
+    pos_weight_changes = weight_diff[spike_time_diff >= 0]
+    neg_weight_changes = weight_diff[spike_time_diff < 0]
+    pos_area = abs(sum(pos_weight_changes))
+    neg_area = abs(sum(neg_weight_changes))
+    print("Area to the right of t = 0: %.3g" % pos_area)
+    print("Area to the left  of t = 0: %.3g" % neg_area)
+    if neg_area > pos_area:
+        print("Negative area greater than positive area; looks good")
+    else:
+        print("PROBLEM: negative area not greater than positive area")
 
     monitors = None
     return (neurons, synapses, monitors, net)
