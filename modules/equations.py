@@ -56,13 +56,13 @@ dpost/dt = -post / tc_post_ee : 1 (clock-driven)
 
 eqs_stdp_pre_ee = '''
 ge_post += w * siemens
-pre = 1
-w = clip(w - nu_ee_pre * post - pre_w_decrease, 0, wmax_ee)
+pre += a_pre
+w = clip(w - post - pre_w_decrease, 0, wmax_ee)
 '''
 
 eqs_stdp_post_ee_no_theta = '''
-post = 1
-w = clip(w + nu_ee_post * pre, 0, wmax_ee)
+post += a_post
+w = clip(w + pre, 0, wmax_ee)
 '''
 eqs_stdp_post_ee_theta = eqs_stdp_post_ee_no_theta + '''
 theta_post = clip(theta_post + theta_coef * nu_ee_post * pre, min_theta * mV, max_theta)
