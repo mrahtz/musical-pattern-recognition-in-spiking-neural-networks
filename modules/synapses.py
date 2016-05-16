@@ -1,5 +1,5 @@
 import brian2 as b2
-import equations as eqs
+import modules.equations as eqs
 
 def stdp_ex_synapses(source, target, connectivity, params):
     if params['adaptation'] == 'weight-relative':
@@ -23,7 +23,7 @@ def stdp_ex_synapses(source, target, connectivity, params):
         source=source,
         target=target,
         model=eqs.eqs_stdp_ee,
-        pre=eqs.eqs_stdp_pre_ee, post=post,
+        on_pre=eqs.eqs_stdp_pre_ee, on_post=post,
         namespace=syn_params
     )
 
@@ -44,7 +44,7 @@ def nonplastic_synapses(source, target, connectivity, synapse_type):
     synapses = b2.Synapses(
         source=source,
         target=target,
-        model=model, pre=pre
+        model=model, on_pre=pre
     )
 
     synapses.connect(connectivity)
@@ -57,7 +57,7 @@ def visualisation_synapses(source, target, connectivity):
     synapses = b2.Synapses(
         source=source,
         target=target,
-        pre=pre
+        on_pre=pre
     )
 
     synapses.connect(connectivity)
