@@ -196,24 +196,7 @@ def run_simulation(run_params, neurons, connections, monitors, run_id):
         for neuron_group in monitors[mon_type]:
             net.add(monitors[mon_type][neuron_group])
 
-    if run_params['no_standalone']:
-        net.run(run_params['run_time'], report='text')
-    else:
-        print("Preparing simulation...")
-        net.run(run_params['run_time'], report='text')
-        print("done!")
-
-        print("Building and running simulation...")
-        if os.name == 'nt':
-            build_dir = 'C:\\temp\\'
-        else:
-            build_dir = '/tmp/'
-        build_dir += run_id
-        b2.device.build(
-            directory=build_dir,
-            compile=True, run=True, debug=False
-        )
-        print("done!")
+    net.run(run_params['run_time'], report='text')
 
     return net
 
@@ -338,9 +321,6 @@ def main_simulation(params):
     (neuron_params, connection_params, monitor_params, run_params,
      analysis_params) = params
 
-    if not run_params['no_standalone']:
-        b2.set_device('cpp_standalone')
-
     spike_filename = os.path.basename(run_params['input_spikes_filename'])
     run_id = spike_filename.replace('.pickle', '')
     if not run_params['from_paramfile']:
@@ -351,27 +331,35 @@ def main_simulation(params):
     if 'run_time' not in run_params:
         run_params['run_time'] = input_end_time
 
+    if not run_params['no_standalone']:
+        if os.name == 'nt':
+            build_dir = 'C:\\temp\\'
+        else:
+            build_dir = '/tmp/'
+        build_dir += run_id
+        b2.set_device('cpp_standalone', directory=build_dir)
+
     print("Initialising neurons...")
     neurons = init_neurons(
         input_spikes, run_params['layer_n_neurons'],
         neuron_params
     )
-    print("done")
+    print("done!")
 
     print("Initialising connections...")
     connections = init_connections(
         neurons,
         connection_params
     )
-    print("done")
+    print("done!")
 
     print("Initialising monitors...")
     monitors = init_monitors(neurons, connections, monitor_params)
-    print("done")
+    print("done!")
 
     print("Running simulation...")
     net = run_simulation(run_params, neurons, connections, monitors, run_id)
-    print("done")
+    print("done!")
 
     analyse_results(
         monitors,
