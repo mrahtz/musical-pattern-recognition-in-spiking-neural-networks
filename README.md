@@ -21,8 +21,6 @@ Needs:
 
 * Python
 * Brian 2 (http://briansimulator.org)
-  * (This code was implemented using Brian 2.0b4. Some changes may be necessary
-    for later versions.)
 * NumPy
 * matplotlib
 * ffmpeg for animation generation
