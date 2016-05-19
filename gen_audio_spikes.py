@@ -11,10 +11,6 @@ import pylab
 import argparse
 from scipy import ndimage
 
-b2.set_device('cpp_standalone')
-
-process = False
-
 parser = argparse.ArgumentParser()
 parser.add_argument('wav_file')
 parser.add_argument('--interactive', action='store_true')
@@ -22,6 +18,11 @@ args = parser.parse_args()
 
 input_filename = args.wav_file
 input_name = os.path.basename(input_filename).replace(".wav", "")
+
+b2.set_device(
+    'cpp_standalone',
+    directory=('/tmp/brian_standalone_%s' % input_name)
+)
 
 sound = b2h.loadsound(input_filename)
 
@@ -61,16 +62,9 @@ anf = b2.NeuronGroup(N=n_freqs, model=eqs, reset='v=0', threshold='v>1')
 m = b2.SpikeMonitor(anf)
 m2 = b2.StateMonitor(anf, ['v', 'I'], record=True)
 
-print("Preparing simulation...")
+print("Building and running simulation...")
 b2.run(sound.duration, report='stdout')
 print("Done!")
-
-print("Building and running simulation...")
-b2.device.build(
-    directory='/tmp/brian_standalone_%s' % input_name,
-    compile=True, run=True, debug=False
-)
-print("done!")
 
 print("Writing spike files...")
 indices = np.array(m.i)
