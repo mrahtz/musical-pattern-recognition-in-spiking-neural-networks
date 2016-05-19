@@ -1,1 +1,1 @@
-./stdp_sounds.py --input_spikes_file test_inputs/scale_0.5_s.pickle
+/home/mpmr500/musical-pattern-recognition-in-spiking-neural-networks/stdp_sounds.py --input_spikes_file test_inputs/scale_0.5_s.pickle --run_time 14 --no_save --no_vis --theta_coef 0.008
