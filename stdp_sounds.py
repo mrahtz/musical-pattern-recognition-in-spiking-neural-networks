@@ -251,6 +251,9 @@ def analyse_results(monitors, connections, analysis_params):
     plt.xlabel("Time (seconds)")
     plt.tight_layout()
 
+    if analysis_params['spikes_only']:
+        return
+
     firing_neurons = set(monitors['spikes']['layer1e'].i)
     utils_mod.plot_state_var(
         monitors['neurons']['layer1e'],
