@@ -41,16 +41,14 @@ max_power = np.amax(spectral_power)
 power_range = max_power - min_power
 spectral_power_normalised = (spectral_power - min_power)/power_range
 
-# emphasise components extending horizontally, in time
-kernel_len = 4
-kernel = np.ones((1, kernel_len))
-spectral_input = ndimage.convolve(spectral_power_normalised, kernel)
-spectral_input[spectral_input < 0.7*kernel_len] = 0
+spectral_input = spectral_power_normalised ** 2
+spectral_input *= 1.9
 
 plt.figure()
 plt.imshow(spectral_input, aspect='auto', origin='lower')
 plt.savefig('figures/%s_spectral_input.png' % input_name)
 
+"""
 dt = (bins[1] - bins[0]) * b2.second
 sound_input = b2.TimedArray(spectral_input.T, dt=dt)
 
@@ -86,3 +84,4 @@ plt.figure()
 plt.plot(m.t/b2.second, m.i, 'k.', markersize=1)
 plt.ylim([0, n_freqs])
 plt.savefig('figures/spectrogram_%s_spikes.png' % input_name)
+"""
