@@ -39,11 +39,6 @@ spectral_input = (spectral_power + 200) / 120
 min_power = np.amin(spectral_power)
 max_power = np.amax(spectral_power)
 power_range = max_power - min_power
-spectral_input = (spectral_power - min_power)/power_range
-
-min_power = np.amin(spectral_power)
-max_power = np.amax(spectral_power)
-power_range = max_power - min_power
 spectral_power_normalised = (spectral_power - min_power)/power_range
 
 # emphasise components extending horizontally, in time
