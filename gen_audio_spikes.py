@@ -60,7 +60,6 @@ I = sound_input(t, i): 1
 '''
 anf = b2.NeuronGroup(N=n_freqs, model=eqs, reset='v=0', threshold='v>1')
 m = b2.SpikeMonitor(anf)
-m2 = b2.StateMonitor(anf, ['v', 'I'], record=True)
 
 print("Building and running simulation...")
 b2.run(sound.duration, report='stdout')
