@@ -31,28 +31,33 @@ if args.interactive:
 
 plt.figure()
 (pxx, freqs, bins, im) = \
-        pylab.specgram(x=sound[:, 0].flatten(), NFFT=1024, Fs=sound.samplerate)
+        pylab.specgram(x=sound[:, 0].flatten(), NFFT=512, Fs=sound.samplerate)
+plt.colorbar()
+plt.xlim([0, 4])
 n_freqs = len(freqs)
 plt.savefig('figures/%s_spectrogram.png' % input_name)
 spectral_power = 10 * np.log10(pxx)
 
-spectral_input = (spectral_power + 200) / 120
 min_power = np.amin(spectral_power)
 max_power = np.amax(spectral_power)
 power_range = max_power - min_power
 spectral_power_normalised = (spectral_power - min_power)/power_range
+plt.figure()
+plt.imshow(spectral_power_normalised, aspect='auto', origin='lower')
+plt.xlim([0, 100])
+plt.colorbar()
 
-spectral_input = spectral_power_normalised ** 2
-spectral_input *= 1.9
-
+spectral_input = np.copy(spectral_power_normalised)
+percentile = np.percentile(spectral_input, 90)
+spectral_input[spectral_input < percentile] = 0
 plt.figure()
 plt.imshow(spectral_input, aspect='auto', origin='lower')
+plt.colorbar()
+plt.xlim([0, 100])
 plt.savefig('figures/%s_spectral_input.png' % input_name)
 
-"""
 dt = (bins[1] - bins[0]) * b2.second
-sound_input = b2.TimedArray(spectral_input.T, dt=dt)
-
+sound_input = b2.TimedArray(spectral_input.T*2, dt=dt)
 
 eqs = '''
 dv/dt = (I-v)/(10*ms) : 1
@@ -65,6 +70,12 @@ print("Building and running simulation...")
 b2.run(sound.duration, report='stdout')
 print("Done!")
 
+plt.figure()
+plt.plot(m.t/b2.second, m.i, 'k.', markersize=1)
+plt.ylim([0, n_freqs])
+plt.savefig('figures/spectrogram_%s_spikes.png' % input_name)
+plt.xlim([0, 10])
+
 print("Writing spike files...")
 indices = np.array(m.i)
 times = np.array(m.t)
@@ -72,9 +83,3 @@ pickle_file = 'test_inputs/' + input_name + '.pickle'
 with open(pickle_file, 'wb') as f:
     pickle.dump((times, indices), f)
 print("done!")
-
-plt.figure()
-plt.plot(m.t/b2.second, m.i, 'k.', markersize=1)
-plt.ylim([0, n_freqs])
-plt.savefig('figures/spectrogram_%s_spikes.png' % input_name)
-"""
