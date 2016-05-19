@@ -16,7 +16,8 @@ def stdp_ex_synapses(source, target, connectivity, params):
         'nu_ee_post': params['nu_ee_post'],
         'theta_coef': params['theta_coef'],
         'min_theta': params['min_theta'],
-        'max_theta': params['max_theta']
+        'max_theta': params['max_theta'],
+        'weight_scale': params['weight_scale']
     }
 
     synapses = b2.Synapses(

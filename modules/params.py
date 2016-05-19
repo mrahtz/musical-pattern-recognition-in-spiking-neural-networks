@@ -48,6 +48,7 @@ def get_params():
     parser.add_argument('--pre_w_decrease', type=float, default=0.00025)
     parser.add_argument('--ex_in_w', type=float, default=10.4)
     parser.add_argument('--spikes_only', action='store_true')
+    parser.add_argument('--weight_scale', type=float, default=3)
     args = parser.parse_args()
 
     if args.parameters_file is not None:
@@ -157,6 +158,7 @@ def connection_params_from_args(args):
 
     connection_params['ex-in-w'] = args.ex_in_w
     connection_params['in-ex-w'] = 17.0
+    connection_params['weight_scale'] = args.weight_scale
 
     return connection_params
 

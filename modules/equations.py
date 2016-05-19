@@ -55,7 +55,7 @@ dpost/dt = -post / tc_post_ee : 1 (clock-driven)
 '''
 
 eqs_stdp_pre_ee = '''
-ge_post += 3 * w * siemens
+ge_post += weight_scale * w * siemens
 pre = 1
 w = clip(w - nu_ee_pre * post - pre_w_decrease, 0, wmax_ee)
 '''
