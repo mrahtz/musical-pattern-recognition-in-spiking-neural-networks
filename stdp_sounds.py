@@ -245,6 +245,7 @@ def analyse_results(monitors, connections, analysis_params):
         'k.',
         markersize=2
     )
+    plt.ylim([-1, max(monitors['spikes']['layer1e'].i)+1])
     plt.grid()
     plt.ylabel("Neuron no.")
 
