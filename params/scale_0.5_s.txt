@@ -30,7 +30,7 @@
   'min_theta': 0. * volt,
   'nu_ee_post': 0.02,
   'nu_ee_pre': 0.0001,
-  'pre_w_decrease': 0.00025,
+  'pre_w_decrease': 0.0003,
   'tc_ge': 1. * msecond,
   'tc_gi': 2. * msecond,
   'tc_post_ee': 20. * msecond,
@@ -44,7 +44,7 @@
   'layer_n_neurons': 16,
   'no_save_results': True,
   'no_standalone': False,
-  'run_time': 14. * second,
+  'run_time': 21. * second,
   'test_competition': False,
   'test_neurons': False,
   'test_stdp_curve': False},
@@ -52,4 +52,4 @@
   'n_notes': None,
   'no_save_figs': True,
   'note_separation': None,
-  'spikes_only': True})
+  'spikes_only': False})
