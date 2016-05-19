@@ -101,7 +101,7 @@ def init_connections(neurons, connection_params):
     if os.path.exists('input-layer1e-weights.pickle'):
         with open('input-layer1e-weights.pickle', 'rb') as pickle_file:
             pickle_obj = pickle.load(pickle_file)
-            connections['input-layer1e'].w = pickle_obj[0]
+            connections['input-layer1e'].w = pickle_obj
     else:
         connections['input-layer1e'].w = 'rand() * 0.4'
         weights = np.array(connections['input-layer1e'].w)
