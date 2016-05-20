@@ -1,0 +1,52 @@
+objects.o: objects.cpp objects.h synapses_classes.h brianlib/spikequeue.h \
+ brianlib/stdint_compat.h brianlib/clocks.h brianlib/stdint_compat.h \
+ brianlib/dynamic_array.h brianlib/stdint_compat.h network.h
+main.o: main.cpp objects.h synapses_classes.h brianlib/spikequeue.h \
+ brianlib/stdint_compat.h brianlib/clocks.h brianlib/stdint_compat.h \
+ brianlib/dynamic_array.h brianlib/stdint_compat.h network.h run.h \
+ brianlib/common_math.h \
+ code_objects/neurongroup_stateupdater_codeobject.h objects.h \
+ code_objects/statemonitor_codeobject.h \
+ code_objects/spikemonitor_codeobject.h \
+ code_objects/neurongroup_thresholder_codeobject.h \
+ code_objects/neurongroup_resetter_codeobject.h
+neurongroup_stateupdater_codeobject.o: \
+ code_objects/neurongroup_stateupdater_codeobject.cpp objects.h \
+ synapses_classes.h brianlib/spikequeue.h brianlib/stdint_compat.h \
+ brianlib/clocks.h brianlib/stdint_compat.h brianlib/dynamic_array.h \
+ brianlib/stdint_compat.h network.h \
+ code_objects/neurongroup_stateupdater_codeobject.h \
+ brianlib/common_math.h
+statemonitor_codeobject.o: code_objects/statemonitor_codeobject.cpp \
+ objects.h synapses_classes.h brianlib/spikequeue.h \
+ brianlib/stdint_compat.h brianlib/clocks.h brianlib/stdint_compat.h \
+ brianlib/dynamic_array.h brianlib/stdint_compat.h network.h \
+ code_objects/statemonitor_codeobject.h brianlib/common_math.h
+spikemonitor_codeobject.o: code_objects/spikemonitor_codeobject.cpp \
+ objects.h synapses_classes.h brianlib/spikequeue.h \
+ brianlib/stdint_compat.h brianlib/clocks.h brianlib/stdint_compat.h \
+ brianlib/dynamic_array.h brianlib/stdint_compat.h network.h \
+ code_objects/spikemonitor_codeobject.h brianlib/common_math.h
+neurongroup_thresholder_codeobject.o: \
+ code_objects/neurongroup_thresholder_codeobject.cpp objects.h \
+ synapses_classes.h brianlib/spikequeue.h brianlib/stdint_compat.h \
+ brianlib/clocks.h brianlib/stdint_compat.h brianlib/dynamic_array.h \
+ brianlib/stdint_compat.h network.h \
+ code_objects/neurongroup_thresholder_codeobject.h brianlib/common_math.h
+neurongroup_resetter_codeobject.o: \
+ code_objects/neurongroup_resetter_codeobject.cpp objects.h \
+ synapses_classes.h brianlib/spikequeue.h brianlib/stdint_compat.h \
+ brianlib/clocks.h brianlib/stdint_compat.h brianlib/dynamic_array.h \
+ brianlib/stdint_compat.h network.h \
+ code_objects/neurongroup_resetter_codeobject.h brianlib/common_math.h
+network.o: network.cpp network.h brianlib/clocks.h \
+ brianlib/stdint_compat.h
+synapses_classes.o: synapses_classes.cpp
+run.o: run.cpp objects.h synapses_classes.h brianlib/spikequeue.h \
+ brianlib/stdint_compat.h brianlib/clocks.h brianlib/stdint_compat.h \
+ brianlib/dynamic_array.h brianlib/stdint_compat.h network.h \
+ code_objects/neurongroup_resetter_codeobject.h objects.h \
+ code_objects/neurongroup_stateupdater_codeobject.h \
+ code_objects/neurongroup_thresholder_codeobject.h \
+ code_objects/spikemonitor_codeobject.h \
+ code_objects/statemonitor_codeobject.h

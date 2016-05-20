@@ -21,11 +21,17 @@ Needs:
 
 * Python
 * Brian 2 (http://briansimulator.org)
-* Brian 1, if you want to generate new input spike sequences
- * (The Brian 1 Hears bridge is used for input spike generation.)
 * NumPy
 * matplotlib
 * ffmpeg for animation generation
+
+If you want to generate new input spike sequences:
+* Brian 1, if you want to generate new input spike sequences (the Brian 1 Hears
+  bridge is used for input spike generation)
+
+If you want to generate new piano test sequences using `gen_test_inputs.py`:
+`pip install --user mingus`
+`apt-get install fluidsynth sox`
 
 ## Files
 

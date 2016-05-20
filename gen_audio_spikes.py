@@ -31,7 +31,9 @@ if args.interactive:
 
 plt.figure()
 (pxx, freqs, bins, im) = \
-        pylab.specgram(x=sound[:, 0].flatten(), NFFT=1024, Fs=sound.samplerate)
+        pylab.specgram(x=sound[:, 0].flatten(), NFFT=256, noverlap=0,
+                Fs=sound.samplerate, mode='magnitude')
+"""
 n_freqs = len(freqs)
 plt.savefig('figures/%s_spectrogram.png' % input_name)
 spectral_power = 10 * np.log10(pxx)
@@ -78,3 +80,4 @@ plt.figure()
 plt.plot(m.t/b2.second, m.i, 'k.', markersize=1)
 plt.ylim([0, n_freqs])
 plt.savefig('figures/spectrogram_%s_spikes.png' % input_name)
+"""
