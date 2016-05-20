@@ -18,7 +18,6 @@ def play_sequence(sequence, separation_seconds):
         note = Note(note_str)
         fluidsynth.play_Note(note)
         fluidsynth.midi.sleep(seconds=separation_seconds)
-        fluidsynth.stop_Note(note)
 
 # generate tracks for each sequence separately
 
