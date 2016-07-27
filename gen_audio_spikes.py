@@ -36,7 +36,6 @@ n_freqs = len(freqs)
 plt.savefig('figures/%s_spectrogram.png' % input_name)
 spectral_power = 10 * np.log10(pxx)
 
-spectral_input = (spectral_power + 200) / 120
 min_power = np.amin(spectral_power)
 max_power = np.amax(spectral_power)
 power_range = max_power - min_power
