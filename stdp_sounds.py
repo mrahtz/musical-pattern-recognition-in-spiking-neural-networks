@@ -212,13 +212,30 @@ def analyse_results(monitors, connections, analysis_params):
     if analysis_params['note_separation'] is not None and \
             analysis_params['n_notes'] is not None:
         end_time = max(monitors['spikes']['layer1e'].t)
-        utils_mod.analyse_note_responses(
+        favourite_notes = utils_mod.analyse_note_responses(
             spike_indices=monitors['spikes']['layer1e'].i,
             spike_times=monitors['spikes']['layer1e'].t,
             note_length=analysis_params['note_separation'],
             n_notes=analysis_params['n_notes'],
             from_time=end_time/2,
             to_time=end_time
+        )
+        utils_mod.ordered_spike_raster(
+            spike_indices=monitors['spikes']['layer1e'].i,
+            spike_times=monitors['spikes']['layer1e'].t,
+            favourite_notes=favourite_notes
+        )
+
+        (relevant_times, neurons_ordered_by_note_indices,
+         neurons_ordered_by_note) = utils_mod.order_spikes_by_note(
+            spike_indices=monitors['spikes']['layer1e'].i,
+            spike_times=monitors['spikes']['layer1e'].t,
+            favourite_notes=favourite_notes
+        )
+        utils_mod.plot_weight_diff(
+            connections['input-layer1e'],
+            monitors['connections']['input-layer1e'],
+            neurons=neurons_ordered_by_note
         )
 
     if not analysis_params['batch']:
