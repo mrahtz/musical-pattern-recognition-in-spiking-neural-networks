@@ -135,12 +135,15 @@ def ordered_spike_raster(spike_indices, spike_times, favourite_notes):
     plt.ylim([-1, n_notes])
     plt.grid()
 
-def plot_weight_diff(connections, weight_monitor, from_t=0, to_t=-1, newfig=True):
+def plot_weight_diff(connections, weight_monitor, from_t=0, to_t=-1,
+        newfig=True, neurons=None):
     if newfig:
         plt.figure()
     else:
         plt.clf()
-    neurons = set(connections.j)
+
+    if neurons is None:
+        neurons = set(connections.j)
     n_neurons = len(neurons)
 
     plt.subplot(n_neurons, 1, 1)
@@ -156,8 +159,8 @@ def plot_weight_diff(connections, weight_monitor, from_t=0, to_t=-1, newfig=True
     max_diff = np.max(weight_diffs)
     min_diff = np.min(weight_diffs)
 
-    for neuron_n in neurons:
-        plt.subplot(n_neurons, 1, neuron_n+1)
+    for plot_n, neuron_n in enumerate(neurons):
+        plt.subplot(n_neurons, 1, plot_n+1)
         relevant_weights = connections.j == neuron_n
         diff = weight_diffs[relevant_weights]
         plt.plot(diff)
