@@ -70,6 +70,7 @@ def analyse_note_responses(spike_indices, spike_times,
             spike_times[spike_indices == neuron_n]
         relevant_spike_times = \
             [t for t in relevant_spike_times if t > from_time and t < to_time]
+        relevant_spike_times = np.array(relevant_spike_times)
         n_spikes = len(relevant_spike_times)
         if n_spikes == 0 or n_spikes < 0.2 * max_spikes:
             continue
@@ -114,10 +115,11 @@ def order_spikes_by_note(spike_indices, spike_times, favourite_notes):
     return (relevant_times, neurons_ordered_by_note_indices,
             neurons_ordered_by_note)
 
+
 def ordered_spike_raster(spike_indices, spike_times, favourite_notes):
     (relevant_times, neurons_ordered_by_note_indices,
      neurons_ordered_by_note) = \
-        order_spikes_by_note(spike_indices, spike_times, favourite_notes)
+        order_spikes_by_note(spike_indices, spike_times, favourite_times)
 
     plt.plot(relevant_times, neurons_ordered_by_note_indices,
              'k.', markersize=2)
@@ -133,14 +135,12 @@ def ordered_spike_raster(spike_indices, spike_times, favourite_notes):
     plt.ylim([-1, n_notes])
     plt.grid()
 
-def plot_weight_diff(connections, weight_monitor, from_t=0, to_t=-1,
-        newfig=True, neurons=None):
+def plot_weight_diff(connections, weight_monitor, from_t=0, to_t=-1, newfig=True):
     if newfig:
         plt.figure()
     else:
         plt.clf()
-    if neurons is None: 
-        neurons = set(connections.j)
+    neurons = set(connections.j)
     n_neurons = len(neurons)
 
     plt.subplot(n_neurons, 1, 1)
