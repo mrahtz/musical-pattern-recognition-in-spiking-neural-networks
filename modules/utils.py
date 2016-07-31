@@ -135,19 +135,46 @@ def ordered_spike_raster(spike_indices, spike_times, favourite_notes):
     plt.ylim([-1, n_notes])
     plt.grid()
 
+
+def small_weight_decrease(spike_indices, spike_times, connections, weight_monitor):
+    plt.figure()
+    plt.subplot(4, 1, 1)
+
+    n = 12000
+    plt.plot(spike_indices[0:n], (spike_times/b2.second)[0:n], '.k',
+            markersize=1, alpha=0.3)
+    plt.xlim([0, 500])
+    plt.ylabel("Time (s)")
+    plt.yticks([0, 0.5, 1.0])
+
+    plot_weight_diff(connections, weight_monitor, newfig=False, to_t=1.2, neurons=[14, 15, 0])
+    plt.xlabel("Afferent number")
+
+    for i in range(4):
+        plt.subplot(4, 1, i+1)
+        xt = [55, 80, 107, 162, 216, 243, 272, 325, 383, 411, 441]
+        plt.gca().set_xticks(xt, minor=True)
+        plt.gca().set_xticks([0, 500], minor=False)
+        plt.xlim([0, 500])
+        plt.grid(which='minor')
+        plt.gca().get_xaxis().set_ticklabels([])
+    plt.gca().get_xaxis().set_ticklabels([0, 500])
+
+    plt.tight_layout()
+
+    plt.savefig('figures/small-weight-decrease.png', dpi=200, bbox_inches='tight')
+
+
 def plot_weight_diff(connections, weight_monitor, from_t=0, to_t=-1,
         newfig=True, neurons=None):
     if newfig:
         plt.figure()
-    else:
-        plt.clf()
 
     if neurons is None:
         neurons = set(connections.j)
     n_neurons = len(neurons)
 
-    plt.subplot(n_neurons, 1, 1)
-    plt.title('Weight adjustments for each neuron')
+    plt.subplot(n_neurons+1, 1, 2)
 
     from_i = np.where(weight_monitor.t >= from_t * b2.second)[0][0]
     if to_t == -1:
@@ -156,15 +183,16 @@ def plot_weight_diff(connections, weight_monitor, from_t=0, to_t=-1,
         to_i = np.where(weight_monitor.t <= to_t * b2.second)[0][-1]
 
     weight_diffs = weight_monitor.w[:, to_i] - weight_monitor.w[:, from_i]
-    max_diff = np.max(weight_diffs)
+    #max_diff = np.max(weight_diffs)
+    max_diff = 0.4
     min_diff = np.min(weight_diffs)
 
     for plot_n, neuron_n in enumerate(neurons):
-        plt.subplot(n_neurons, 1, plot_n+1)
+        plt.subplot(n_neurons+1, 1, plot_n+2)
         relevant_weights = connections.j == neuron_n
         diff = weight_diffs[relevant_weights]
-        plt.plot(diff)
-        plt.ylim([min_diff, max_diff])
-        plt.yticks([])
+        plt.plot(diff, 'k')
+        plt.ylim([-0.1, 0.4])
+        plt.yticks([-0.1, 0, 0.4], ['-0.1', '0', '+0.4'])
         plt.xticks([])
-        plt.ylabel("%d" % neuron_n)
+        plt.ylabel("Neuron %d" % neuron_n)

@@ -275,10 +275,9 @@ def analyse_results(monitors, connections, analysis_params):
         'Membrane potential'
     )
 
-    utils_mod.plot_weight_diff(
-        connections['input-layer1e'],
-        monitors['connections']['input-layer1e']
-    )
+    utils_mod.small_weight_decrease(monitors['spikes']['input'].i,
+            monitors['spikes']['input'].t, connections['input-layer1e'],
+            monitors['connections']['input-layer1e'])
 
 def pickle_results(monitors, run_id):
     """

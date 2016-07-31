@@ -1,1 +1,1 @@
-./stdp_sounds.py --input_spikes_file test_inputs/two_notes_0.5_s.pickle
+/Users/matthew/Downloads/musical-pattern-recognition-in-spiking-neural-networks/stdp_sounds.py --input_spikes_file test_inputs/two_notes_0.5_s.pickle --no_save --no_vis
