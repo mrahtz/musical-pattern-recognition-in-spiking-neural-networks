@@ -1,17 +1,20 @@
-Step 1: convert .wav files into spikes:
+Step 1: place `bh.wav`, `fl.wav` and `jp.wav` in `tibicen_train` directory, and
+`1.wav` through `lq5.wav` in `tibicen_test` directory.
+
+Step 2: convert .wav files into spikes:
 
 ```
 python gen_audio_spikes.py --train
 python gen_audio_spikes.py --test
 ```
 
-Step 2: use known sound data to train the network:
+Step 3: use known sound data to train the network:
 
 ```
 python stdp_sounds.py --input_spikes_file tibicen_train/tibicen_train.pickle --save_weights
 ```
 
-Step 3: use the saved network state (synaptic weights + measure of intrinsic
+Step 4: use the saved network state (synaptic weights + measure of intrinsic
 plasticity, 'theta') to classify the test track:
 
 ```
