@@ -40,7 +40,8 @@ def get_params():
                                  'absolute-adapting-noexp',
                                  'ge-theta'],
                         default='absolute-adapting-exp')
-    parser.add_argument('--no_save', action='store_true')
+    parser.add_argument('--save_results', action='store_true')
+    parser.add_argument('--save_figs', action='store_true')
     parser.add_argument('--note_separation', type=float)
     parser.add_argument('--n_notes', type=int)
     parser.add_argument('--no_standalone', action='store_true')
@@ -169,7 +170,7 @@ def run_params_from_args(args):
     run_params['no_standalone'] = args.no_standalone
     if args.run_time is not None:
         run_params['run_time'] = float(args.run_time) * b2.second
-    run_params['no_save_results'] = args.no_save
+    run_params['save_results'] = args.save_results
     run_params['test_neurons'] = args.test_neurons
     run_params['test_stdp_curve'] = args.test_stdp_curve
     run_params['test_competition'] = args.test_competition
@@ -189,7 +190,7 @@ def analysis_params_from_args(args):
     analysis_params = {}
 
     analysis_params['batch'] = args.batch
-    analysis_params['no_save_figs'] = args.no_save
+    analysis_params['save_figs'] = args.save_figs
     analysis_params['spikes_only'] = args.spikes_only
     if args.note_separation is not None:
         analysis_params['note_separation'] = args.note_separation * b2.second

@@ -370,10 +370,10 @@ def main_simulation(params):
         connections,
         analysis_params
     )
-    if not analysis_params['no_save_figs']:
+    if analysis_params['save_figs']:
         utils_mod.save_figures(run_id)
 
-    if not run_params['no_save_results']:
+    if run_params['save_results']:
         print("Saving results...")
         pickle_results(monitors, run_id)
         print("done!")
