@@ -165,3 +165,12 @@ def plot_weight_diff(connections, weight_monitor, from_t=0, to_t=-1, newfig=True
         plt.yticks([])
         plt.xticks([])
         plt.ylabel("%d" % neuron_n)
+
+def plot_weights(connections):
+    plt.figure()
+    for i in range(16):
+        plt.subplot(16, 1, i+1)
+        relevant_weights = connections['input-layer1e'].j == i
+        weights = np.array(connections['input-layer1e'].w)[relevant_weights]
+        plt.plot(weights)
+        plt.ylim([0, 1])
