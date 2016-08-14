@@ -1,0 +1,4 @@
+*.pyc
+.DS_Store
+tibicen_train/*.wav
+tibicen_test/*.wav

@@ -1,0 +1,1 @@
+stdp_sounds.py --input_spikes_file test_inputs/tibicen_train.pickle --theta_coef 0 --nu_ee_post 0 --nu_ee_pre 0 --pre_w_decrease 0 --load_weights input-layer1e-weights-tibicen_train.pickle --load_theta theta-tibicen_train.pickle
