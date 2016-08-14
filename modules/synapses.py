@@ -24,7 +24,8 @@ def stdp_ex_synapses(source, target, connectivity, params):
         target=target,
         model=eqs.eqs_stdp_ee,
         on_pre=eqs.eqs_stdp_pre_ee, on_post=post,
-        namespace=syn_params
+        namespace=syn_params,
+        method='euler'
     )
 
     synapses.connect(connectivity)
