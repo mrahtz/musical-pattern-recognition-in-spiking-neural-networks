@@ -47,7 +47,6 @@
   'test_competition': False,
   'test_neurons': False,
   'test_stdp_curve': False},
- {'batch': False,
-  'n_notes': None,
+ {'n_notes': None,
   'save_figs': False,
   'note_separation': None})
