@@ -47,7 +47,7 @@ def get_params():
     parser.add_argument('--vis', action='store_true')
     parser.add_argument('--pre_w_decrease', type=float, default=0.00025)
     parser.add_argument('--ex_in_w', type=float, default=10.4)
-    parser.add_argument('--in_ex_w', type=float, default=17)
+    parser.add_argument('--in_ex_w', type=float, default=17.0)
     parser.add_argument('--spikes_only', action='store_true')
     args = parser.parse_args()
 
