@@ -221,8 +221,7 @@ def analyse_results(monitors, connections, analysis_params):
             to_time=end_time
         )
 
-    if not analysis_params['batch']:
-        plt.ion()
+    plt.ion()
 
     plt.figure()
 

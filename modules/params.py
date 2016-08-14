@@ -27,7 +27,6 @@ def get_params():
     parser.add_argument('--nu_ee_post', type=float, default=0.02)
     parser.add_argument('--max_theta', type=float, default=60)
     parser.add_argument('--run_time')
-    parser.add_argument('--batch', action='store_true')
     # set monitors time step for 60 fps by default,
     # for generation of 60 fps visualisation
     parser.add_argument('--monitors_dt', type=float, default=1000/60.0)
@@ -188,7 +187,6 @@ def monitor_params_from_args(args):
 def analysis_params_from_args(args):
     analysis_params = {}
 
-    analysis_params['batch'] = args.batch
     analysis_params['save_figs'] = args.save_figs
     analysis_params['spikes_only'] = args.spikes_only
     if args.note_separation is not None:
