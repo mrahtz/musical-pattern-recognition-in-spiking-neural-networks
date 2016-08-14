@@ -32,11 +32,10 @@ neuron_eqs_i = neuron_eqs + '''
 dv/dt = ((v_rest - v) + (I_synE + I_synI) * 1 * ohm) / tc_v : volt
 '''
 
-# TODO: add debug flag which switches to event-driven for extra speed
 eqs_stdp_ee = '''
 w                             : 1
-dpre/dt = -pre / tc_pre_ee    : 1 (clock-driven)
-dpost/dt = -post / tc_post_ee : 1 (clock-driven)
+dpre/dt = -pre / tc_pre_ee    : 1 (event-driven)
+dpost/dt = -post / tc_post_ee : 1 (event-driven)
 '''
 
 eqs_stdp_pre_ee = '''

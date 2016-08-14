@@ -28,7 +28,7 @@ def excitatory_neurons(n_neurons, params):
         model=eqs.neuron_eqs_e, threshold=eqs.thresh_e,
         refractory=params['refrac_e'], reset=eqs.reset_e,
         namespace=neuron_params,
-        method='euler'
+        method='euler' # automatically suggested by Brian
     )
     neurons.v = params['v_rest_e']
     neurons.theta = \
@@ -54,7 +54,7 @@ def inhibitory_neurons(n_neurons, params):
         model=eqs.neuron_eqs_i, threshold=eqs.thresh_i,
         refractory=params['refrac_i'], reset=eqs.reset_i,
         namespace=neuron_params,
-        method='euler'
+        method='euler' # automatically suggested by Brian
     )
     neurons.v = params['v_rest_i']
 
