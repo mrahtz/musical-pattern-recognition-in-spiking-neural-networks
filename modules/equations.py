@@ -1,21 +1,6 @@
-reset_e_no_theta = 'v = v_reset_e'
-# theta increases by a fixed amount on each spike
-reset_e_theta = reset_e_no_theta + '''
-theta = clip(theta + theta_coef * mV, min_theta, max_theta)
-'''
-# theta increases proportionally to distance from max_theta
-reset_e_adapting_theta_exp = reset_e_no_theta + '''
+reset_e = '''
+v = v_reset_e
 theta = theta + theta_coef * (max_theta - theta)
-'''
-# theta increases by theta_mod, which decays exponentially
-reset_e_adapting_theta_noexp = reset_e_no_theta + '''
-theta = theta + theta_coef * theta_mod * mV
-theta_mod *= 0.8
-'''
-# theta increases proportionally to distance from max_ge
-reset_e_ge_theta = reset_e_no_theta + '''
-max_ge = int(ge > max_ge) * ge + int(max_ge >= ge) * max_ge
-theta = theta + theta_coef * ((45 + max_ge/nS) * mV - theta)
 '''
 
 thresh_e = 'v > (theta - offset + v_thresh_e)'
@@ -60,10 +45,7 @@ pre = 1
 w = clip(w - nu_ee_pre * post - pre_w_decrease, 0, wmax_ee)
 '''
 
-eqs_stdp_post_ee_no_theta = '''
+eqs_stdp_post_ee = '''
 post = 1
 w = clip(w + nu_ee_post * pre, 0, wmax_ee)
-'''
-eqs_stdp_post_ee_theta = eqs_stdp_post_ee_no_theta + '''
-theta_post = clip(theta_post + theta_coef * nu_ee_post * pre, min_theta * mV, max_theta)
 '''
