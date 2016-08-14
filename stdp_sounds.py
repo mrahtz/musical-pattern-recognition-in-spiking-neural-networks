@@ -70,7 +70,7 @@ def init_neurons(input_spikes, layer_n_neurons, neuron_params):
     )
 
     # visualisation neurons
-    if not neuron_params['no_vis']:
+    if neuron_params['vis']:
         neurons['layer1vis'] = neuron_mod.visualisation_neurons(
             n_neurons=layer_n_neurons,
             params=neuron_params

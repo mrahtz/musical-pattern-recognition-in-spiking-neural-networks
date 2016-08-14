@@ -45,7 +45,7 @@ def get_params():
     parser.add_argument('--note_separation', type=float)
     parser.add_argument('--n_notes', type=int)
     parser.add_argument('--no_standalone', action='store_true')
-    parser.add_argument('--no_vis', action='store_true')
+    parser.add_argument('--vis', action='store_true')
     parser.add_argument('--pre_w_decrease', type=float, default=0.00025)
     parser.add_argument('--ex_in_w', type=float, default=10.4)
     parser.add_argument('--in_ex_w', type=float, default=17)
@@ -113,7 +113,7 @@ def neuron_params_from_args(args):
     neuron_params['v_thresh_i'] = -40 * b2.mV
     neuron_params['refrac_e'] = 5 * b2.ms
     neuron_params['refrac_i'] = 2 * b2.ms
-    neuron_params['no_vis'] = args.no_vis
+    neuron_params['vis'] = args.vis
     neuron_params['tc_v_ex'] = 100 * b2.ms
     neuron_params['tc_v_in'] = 10 * b2.ms
     neuron_params['tc_ge'] = 1 * b2.ms
@@ -133,7 +133,6 @@ def neuron_params_from_args(args):
     neuron_params['theta_coef'] = args.theta_coef
     neuron_params['max_theta'] = args.max_theta * b2.mV
     neuron_params['adaptation'] = args.adaptation
-    neuron_params['no_vis'] = args.no_vis
 
     return neuron_params
 
