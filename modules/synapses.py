@@ -2,10 +2,7 @@ import brian2 as b2
 import modules.equations as eqs
 
 def stdp_ex_synapses(source, target, connectivity, params):
-    if params['adaptation'] == 'weight-relative':
-        post = eqs.eqs_stdp_post_ee_theta
-    else:
-        post = eqs.eqs_stdp_post_ee_no_theta
+    post = eqs.eqs_stdp_post_ee_no_theta
 
     syn_params = {
         'tc_pre_ee': params['tc_pre_ee'],

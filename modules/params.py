@@ -32,13 +32,6 @@ def get_params():
     parser.add_argument('--monitors_dt', type=float, default=1000/60.0)
     parser.add_argument('--monitor_all_time', action='store_true')
     parser.add_argument('--layer_n_neurons', type=int, default=16)
-    parser.add_argument('--adaptation',
-                        choices=['absolute',
-                                 'weight-relative',
-                                 'absolute-adapting-exp',
-                                 'absolute-adapting-noexp',
-                                 'ge-theta'],
-                        default='absolute-adapting-exp')
     parser.add_argument('--save_results', action='store_true')
     parser.add_argument('--save_figs', action='store_true')
     parser.add_argument('--note_separation', type=float)
@@ -132,7 +125,6 @@ def neuron_params_from_args(args):
     neuron_params['offset'] = 20 * b2.mV
     neuron_params['theta_coef'] = args.theta_coef
     neuron_params['max_theta'] = args.max_theta * b2.mV
-    neuron_params['adaptation'] = args.adaptation
 
     return neuron_params
 
@@ -154,7 +146,6 @@ def connection_params_from_args(args):
     connection_params['min_theta'] = 0 * b2.mV
     connection_params['max_theta'] = args.max_theta * b2.mV
     connection_params['theta_coef'] = args.theta_coef
-    connection_params['adaptation'] = args.adaptation
 
     connection_params['ex-in-w'] = args.ex_in_w
     connection_params['in-ex-w'] = args.in_ex_w

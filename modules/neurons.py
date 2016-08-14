@@ -8,16 +8,7 @@ def prespecified_spike_neurons(n_neurons, spike_indices, spike_times):
     return neurons
 
 def excitatory_neurons(n_neurons, params):
-    if params['adaptation'] == 'absolute':
-        reset = eqs.reset_e_theta
-    elif params['adaptation'] == 'absolute-adapting-exp':
-        reset = eqs.reset_e_adapting_theta_exp
-    elif params['adaptation'] == 'absolute-adapting-noexp':
-        reset = eqs.reset_e_adapting_theta_noexp
-    elif params['adaptation'] == 'ge-theta':
-        reset = eqs.reset_e_ge_theta
-    else:
-        reset = eqs.reset_e_no_theta
+    reset = eqs.reset_e_adapting_theta_exp
 
     neuron_params = {
         'v_thresh_e': params['v_thresh_e'],
