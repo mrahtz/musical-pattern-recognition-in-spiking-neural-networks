@@ -87,6 +87,7 @@ def load_params(params_filename):
         second = b2.second
         msecond = b2.msecond
         ksecond = b2.ksecond
+        # ehehhh hackety hack hack hack
         params = eval(contents)
     return params
 
