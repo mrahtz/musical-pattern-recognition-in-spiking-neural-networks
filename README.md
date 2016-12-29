@@ -3,7 +3,7 @@
 This repository contains the source code for my final-year project in my BEng
 degree, 'Musical Pattern Recognition in Spiking Neural Networks'. The title of
 the project should hopefully be self-descriptive as to the purpose of the
-project.
+project. The report accompanying the project is available at <http://amid.fish/beng_project_report.pdf>.
 
 As seems to be the case with pretty much all final-year projects, only a small
 portion of what was originally intended was actually achieved. This code
