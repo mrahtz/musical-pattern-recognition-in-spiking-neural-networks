@@ -17,7 +17,10 @@ plasticity](http://dx.doi.org/10.3389/fncom.2015.00099).
 
 ## Requirements
 
-Needs:
+First, in order to properly clone the repository and all the associated data,
+you'll need to to install Git Large File Storage: <https://git-lfs.github.com>.
+
+Then you'll need:
 
 * Python
 * Brian 2 (http://briansimulator.org)
